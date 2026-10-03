@@ -174,37 +174,6 @@ button{font:inherit}
   filter: drop-shadow(0 15px 35px rgba(255, 107, 129, 0.4));
 }
 
-/* 7. 暂停按钮 */
-.pause-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: rgba(0, 0, 0, 0.3);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(5px);
-  transition: all 0.3s;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  opacity: 0;
-  visibility: hidden;
-}
-.pause-btn.show {
-  opacity: 1;
-  visibility: visible;
-}
-.pause-btn:hover {
-  background: rgba(0, 0, 0, 0.6);
-}
-
 @keyframes spin{to{transform:rotate(360deg)}}
 
 @media(max-width:650px){
@@ -223,14 +192,11 @@ button{font:inherit}
   .record-player{width:68vw}
   .final-line.fourth { font-size: 22px; }
   .cake-svg { width: 180px; height: 180px; }
-  .pause-btn { width: 40px; height: 40px; font-size: 18px; top: 15px; right: 15px; }
 }
 </style>
 </head>
 <body>
 <div class="grain"></div>
-
-<button class="pause-btn" id="pauseBtn" title="暂停">⏸️</button>
 
 <section id="intro" class="screen active">
   <div class="intro-small">A LITTLE BIRTHDAY GIFT FOR YOU</div>
@@ -244,8 +210,8 @@ button{font:inherit}
     <div class="memory-content">
       <img class="memory-photo" src="photo.jpg" alt="那天我们在太原相见">
       <div class="memory-copy">
-        <div class="eyebrow">那一天我们在太原第一次相见</div>
-        <h2>那时候，我舍不得离开，我会记住一辈子。</h2>
+        <div class="eyebrow">那一天</div>
+        <h2>那时候，我舍不得离开。</h2>
         <p>后来想想，我们再多见面会不会更好。</p>
       </div>
     </div>
@@ -258,7 +224,7 @@ button{font:inherit}
       <div class="eyebrow">第一次见面</div>
       <h2>第一次见面，第一次牵手</h2>
       <p>第一次看电影 · 第一次吃饭 · 第一次牵手</p>
-      <p>我其实挺遗憾，当时没有和你好好牵着手漫步在太原的夜晚。</p>
+      <p>我其实挺遗憾，当时没有和你好好散散步。</p>
     </div>
   </div>
 </section>
@@ -330,50 +296,18 @@ button{font:inherit}
   </svg>
 </div>
 
-<audio id="bgMusic" src="music.mp3" preload="auto"></audio>
+<audio id="bgMusic" src="music.wav" preload="auto"></audio>
 
 <script>
 const $=id=>document.getElementById(id);
 const screens={intro:$("intro"),memory:$("memory"),meeting:$("meeting"),memories:$("memories"),music:$("music"),final:$("final")};
 const audio=$("bgMusic"), player=$("playerShell");
-const pauseBtn=$("pauseBtn");
 
-// 全局状态
-let isPaused = false;
-let flowStarted = false;
-
-// 显示某个场景
 function show(name){
   Object.values(screens).forEach(s=>s.classList.remove("active"));
   screens[name].classList.add("active");
 }
 
-// 自定义的带暂停功能的 sleep
-function sleep(ms) {
-    return new Promise(resolve => {
-        let start = Date.now();
-        let remaining = ms;
-        const check = () => {
-            if (isPaused) {
-                // 如果暂停，计算这段时间消耗了多少，从剩余时间里扣除，然后继续轮询
-                let elapsed = Date.now() - start;
-                remaining -= elapsed;
-                start = Date.now();
-                setTimeout(check, 100);
-            } else {
-                let elapsed = Date.now() - start;
-                if (elapsed >= remaining) {
-                    resolve();
-                } else {
-                    setTimeout(check, 100);
-                }
-            }
-        };
-        check();
-    });
-}
-
-// 歌词数据
 const lyricsData=[
  {time:0,text:"作曲 : G.E.M.邓紫棋"},
  {time:1,text:"作词 : G.E.M.邓紫棋"},
@@ -421,78 +355,51 @@ audio.addEventListener("timeupdate",()=>{
   }
 });
 
-// 照片轮播
+let flowStarted=false;
 const portraitCards=[...document.querySelectorAll(".portrait-card")];
 const portraitCurrent=$("portraitCurrent");
 const portraitProgress=$("portraitProgress");
 let portraitIndex=0;
-
+let portraitTimer=null;
 function showPortrait(i){
   portraitCards.forEach((card,idx)=>card.classList.toggle("active",idx===i));
   portraitCurrent.textContent=String(i+1).padStart(2,"0");
   portraitProgress.style.width=`${((i+1)/portraitCards.length)*100}%`;
 }
-
-// 核心故事线（已完全改为 async/await，支持暂停）
-async function runStory() {
-  // 1. 太原回忆停留 4.5 秒
-  await sleep(4500);
-
-  // 2. 进入第一次见面
-  show("meeting");
-  await sleep(4000);
-
-  // 3. 进入照片轮播
-  show("memories");
-  for (let i = 0; i < portraitCards.length; i++) {
-    showPortrait(i);
-    await sleep(3500); // 每张照片停留 3.5 秒
-  }
-
-  // 4. 照片看完，进入黑胶唱片
-  show("music");
+function startPortraits(){
+  showPortrait(0);
+  clearInterval(portraitTimer);
+  portraitTimer=setInterval(()=>{
+    portraitIndex+=1;
+    if(portraitIndex>=portraitCards.length){
+      clearInterval(portraitTimer);
+      setTimeout(()=>show("music"),850);
+      return;
+    }
+    showPortrait(portraitIndex);
+  }, 3500); // 3.5秒一张
 }
 
-// 开始按钮
-$("openBtn").addEventListener("click", async () => {
-  if (flowStarted) return;
-  flowStarted = true;
+$("openBtn").addEventListener("click",async()=>{
+  if(flowStarted)return;
+  flowStarted=true;
 
-  try {
-    audio.currentTime = 0;
+  try{
+    audio.currentTime=0;
     await audio.play();
     player.classList.add("playing");
-  } catch (e) {
+  }catch(e){
     console.log("本地测试或浏览器限制，音频未自动播放");
   }
 
-  // 显示暂停按钮
-  pauseBtn.classList.add("show");
-
-  // 启动故事线
-  runStory();
+  show("memory");
+  setTimeout(()=>show("meeting"), 4500); // 4.5秒后切到第一次见面
+  setTimeout(()=>{show("memories");startPortraits();}, 8500); // 8.5秒后进入照片轮播
 });
 
-// 暂停/继续按钮逻辑
-pauseBtn.addEventListener("click", () => {
-  isPaused = !isPaused;
-  if (isPaused) {
-    audio.pause();
-    pauseBtn.innerHTML = "▶️";
-    pauseBtn.title = "继续";
-    document.querySelector('.music-scene').classList.add('paused'); // 可选：暂停黑胶旋转
-  } else {
-    audio.play();
-    pauseBtn.innerHTML = "⏸️";
-    pauseBtn.title = "暂停";
-    document.querySelector('.music-scene').classList.remove('paused');
-  }
-});
-
-// 点击黑胶唱片可以手动播放（防浏览器拦截）
-player.addEventListener("click", () => {
-  if (!audio.paused || isPaused) return;
-  audio.play().then(() => {
+player.addEventListener("click",()=>{
+  if(!audio.paused)return;
+  audio.play().then(()=>{
     player.classList.add("playing");
   }).catch(()=>{});
 });
@@ -611,35 +518,29 @@ function startFireworks() {
 }
 
 /* ==========================================================
-   结局时间线（音乐结束后，也改为 async/await）
+   结局时间线（音乐结束后）
 ========================================================== */
-audio.addEventListener("ended", async () => {
+audio.addEventListener("ended",()=>{
+  clearInterval(portraitTimer);
   player.classList.remove("playing");
   show("final");
   
   // 1. 依次显示文字
-  await sleep(500);
-  $("f1").classList.add("show");
-  
-  await sleep(1500);
-  $("f2").classList.add("show");
-  
-  await sleep(1500);
-  $("f3").classList.add("show");
-  
-  await sleep(1500);
-  $("f4").classList.add("show"); // 生日快乐
-  
-  await sleep(1500);
-  $("letterHint").classList.add("show-hint"); // 还有一封信
+  setTimeout(()=>$("f1").classList.add("show"), 500);
+  setTimeout(()=>$("f2").classList.add("show"), 2000);
+  setTimeout(()=>$("f3").classList.add("show"), 3500);
+  setTimeout(()=>$("f4").classList.add("show"), 5000); // 生日快乐
+  setTimeout(()=>$("letterHint").classList.add("show-hint"), 6500); // 还有一封信
 
   // 2. 触发烟花 (延迟 7 秒，让文字先站定)
-  await sleep(1000);
-  startFireworks();
+  setTimeout(() => {
+    startFireworks();
+  }, 7000);
 
-  // 3. 生日蛋糕缓缓放大定格
-  await sleep(3000);
-  $("cakeWrapper").classList.add("show");
+  // 3. 生日蛋糕缓缓放大定格 (延迟 10 秒)
+  setTimeout(() => {
+    $("cakeWrapper").classList.add("show");
+  }, 10000);
 });
 
 </script>
