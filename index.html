@@ -1,439 +1,302 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>多远都要在一起</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            min-height: 100vh;
-            background: radial-gradient(circle at 20% 30%, #fff5f6 0%, #f0f2f5 100%);
-            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
-        /* 背景漂浮的粉色光斑 */
-        .bg-glow {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 107, 129, 0.15);
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: 0;
-            animation: breathe 6s infinite alternate;
-        }
-        .bg-glow:nth-child(1) { top: -100px; left: -100px; }
-        .bg-glow:nth-child(2) { bottom: -100px; right: -100px; background: rgba(161, 140, 209, 0.15); animation-delay: 2s; }
-        @keyframes breathe { 0% { transform: scale(1); } 100% { transform: scale(1.3); } }
-
-        /* ========== 整体主容器 ========== */
-        .main-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 50px;
-            max-width: 900px;
-            width: 100%;
-            z-index: 1;
-        }
-
-        /* ========== 左边：悬挂照片墙 ========== */
-        .left-gallery {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 25px;
-            padding: 20px 30px;
-        }
-        /* 有质感的悬挂麻绳 */
-        .left-gallery::before {
-            content: '';
-            position: absolute;
-            top: 0; bottom: 0; left: 50%;
-            width: 4px;
-            background: repeating-linear-gradient(45deg, #d2b48c, #d2b48c 4px, #c19a6b 4px, #c19a6b 8px);
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            transform: translateX(-50%);
-            z-index: -1;
-        }
-
-        .photo-wrap {
-            background: white;
-            padding: 8px 8px 24px 8px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-            border-radius: 2px;
-            position: relative;
-            transition: all 0.4s ease;
-            animation: swing 4s ease-in-out infinite alternate;
-        }
-        /* 模拟金属夹子 */
-        .photo-wrap::after {
-            content: '';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 14px;
-            height: 16px;
-            background: linear-gradient(to bottom, #ccc, #888);
-            border-radius: 4px 4px 0 0;
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.5), 0 2px 4px rgba(0,0,0,0.2);
-        }
-        /* 错落的排布 */
-        .photo-wrap:nth-child(1) { transform: rotate(-6deg) translateX(-15px); animation-delay: 0s; }
-        .photo-wrap:nth-child(2) { transform: rotate(5deg) translateX(15px); animation-delay: 0.5s; }
-        .photo-wrap:nth-child(3) { transform: rotate(-3deg) translateX(-5px); animation-delay: 1s; }
-
-        .photo-wrap img {
-            width: 85px;
-            height: 105px;
-            object-fit: cover;
-            border-radius: 1px;
-        }
-
-        @keyframes swing {
-            0% { rotate: -2deg; }
-            100% { rotate: 2deg; }
-        }
-
-        /* ========== 右边：唱片机与歌词 ========== */
-        .right-player {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            border-radius: 30px;
-            padding: 35px 30px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(255,255,255,0.5);
-        }
-
-        /* 黑胶唱片机（带光晕） */
-        .record-player {
-            position: relative;
-            width: 180px;
-            height: 180px;
-            margin-bottom: 25px;
-        }
-        .vinyl {
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, #3a3a3a 30%, #1a1a1a 70%, #000 100%);
-            border-radius: 50%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 40px rgba(255,107,129,0.3);
-            animation: spin 4s linear infinite;
-            animation-play-state: paused;
-            transition: box-shadow 0.5s;
-        }
-        .vinyl::before {
-            content: '';
-            position: absolute;
-            width: 85%;
-            height: 85%;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
-        }
-        
-        .vinyl-label {
-            width: 42%;
-            height: 42%;
-            border-radius: 50%;
-            background-image: url('photo.jpg');
-            background-size: cover;
-            background-position: center;
-            z-index: 2;
-            border: 3px solid #ff6b81;
-            box-shadow: 0 0 15px rgba(255,107,129,0.6);
-        }
-        
-        /* 唱臂 */
-        .tonearm {
-            position: absolute;
-            top: -12px;
-            right: 8px;
-            width: 65px;
-            height: 6px;
-            background: linear-gradient(to bottom, #eee, #999);
-            border-radius: 5px;
-            transform-origin: right center;
-            transform: rotate(-35deg);
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 3;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-        }
-        .tonearm::after {
-            content: '';
-            position: absolute;
-            left: -8px;
-            top: -3px;
-            width: 16px;
-            height: 12px;
-            background: #444;
-            border-radius: 50%;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        /* 播放状态 */
-        .playing .vinyl { 
-            animation-play-state: running; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 60px rgba(255,107,129,0.6);
-        }
-        .playing .tonearm { transform: rotate(5deg); }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* 歌词区 */
-        .lyrics-container {
-            width: 100%;
-            height: 110px;
-            overflow: hidden;
-            position: relative;
-            mask-image: linear-gradient(transparent, black 20%, black 80%, transparent);
-            -webkit-mask-image: linear-gradient(transparent, black 20%, black 80%, transparent);
-            margin-bottom: 30px;
-        }
-        .lyrics-inner {
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .lyric-line {
-            font-size: 14px;
-            color: #aaa;
-            padding: 10px 0;
-            text-align: center;
-            transition: all 0.4s ease;
-            transform-origin: center;
-        }
-        .lyric-line.active {
-            color: #ff6b81;
-            font-weight: bold;
-            font-size: 17px;
-            transform: scale(1.1);
-            text-shadow: 0 0 10px rgba(255,107,129,0.5);
-        }
-
-        /* 播放按钮（脉冲光效） */
-        .play-btn {
-            background: linear-gradient(135deg, #ff6b81, #ff9a9e);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 16px 50px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(255, 107, 129, 0.5);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-        .play-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 100%; height: 100%;
-            background: rgba(255,255,255,0.2);
-            transform: translate(-50%, -50%) scale(0);
-            border-radius: 50%;
-            transition: transform 0.5s;
-        }
-        .play-btn:hover::before { transform: translate(-50%, -50%) scale(2); opacity: 0; }
-        .play-btn:active { transform: scale(0.95); }
-        .play-btn.playing {
-            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-            box-shadow: 0 8px 25px rgba(161, 140, 209, 0.5);
-        }
-
-        /* 心跳脉冲动画 */
-        .play-btn:not(.playing) {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 107, 129, 0.6); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 107, 129, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 107, 129, 0); }
-        }
-
-        #bg-music { display: none; }
-
-        /* ========== 手机屏幕适配 ========== */
-        @media (max-width: 650px) {
-            .main-container {
-                flex-direction: column;
-                gap: 20px;
-            }
-            .left-gallery {
-                flex-direction: row;
-                padding: 10px 0;
-                gap: 15px;
-            }
-            .left-gallery::before { display: none; }
-            .photo-wrap { padding: 5px 5px 15px 5px; animation: none; }
-            .photo-wrap:nth-child(1) { transform: rotate(-4deg) translateX(0); }
-            .photo-wrap:nth-child(2) { transform: rotate(3deg) translateX(0); }
-            .photo-wrap:nth-child(3) { transform: rotate(-2deg) translateX(0); }
-            .photo-wrap img { width: 70px; height: 85px; }
-            .right-player { padding: 25px 20px; }
-            .record-player { width: 150px; height: 150px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f7f3f1">
+<title>多远都要在一起</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#272321;
+  --soft:#817873;
+  --rose:#c98f8d;
+  --paper:#f7f3ef;
+  --paper2:#eee7e1;
+  --line:rgba(39,35,33,.12);
+}
+html,body{width:100%;min-height:100%;background:var(--paper);color:var(--ink)}
+body{
+  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+button{font:inherit}
+.screen{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity 1s ease,visibility 1s ease;
+  overflow:hidden;
+}
+.screen.active{opacity:1;visibility:visible;pointer-events:auto}
+.grain{
+  position:absolute;inset:0;pointer-events:none;opacity:.045;z-index:20;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+#intro{background:#171514;color:#eee9e5;flex-direction:column;text-align:center}
+.intro-small{font-size:12px;letter-spacing:5px;opacity:.48;margin-bottom:25px}
+.intro-title{font-size:22px;font-weight:400;letter-spacing:4px;line-height:1.8;opacity:.92}
+.open-btn{
+  margin-top:54px;border:0;background:transparent;color:#eee9e5;
+  font-size:13px;letter-spacing:4px;cursor:pointer;opacity:.7;
+  position:relative;padding:15px 22px;
+}
+.open-btn:after{
+  content:"";position:absolute;left:50%;bottom:0;width:26px;height:1px;
+  background:rgba(238,233,229,.55);transform:translateX(-50%);
+  transition:width .5s ease;
+}
+.open-btn:hover:after{width:54px}
+.scene-wrap{width:min(920px,92vw);height:min(760px,88vh);position:relative}
+.scene-date{
+  position:absolute;top:0;left:0;font-family:Georgia,serif;font-size:11px;
+  letter-spacing:4px;color:var(--soft);opacity:0;transform:translateY(8px);
+  transition:all 1s ease .4s;
+}
+.memory.active .scene-date{opacity:1;transform:none}
+.memory-content{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+}
+.memory-photo{
+  width:min(270px,62vw);aspect-ratio:3/4;object-fit:cover;
+  box-shadow:0 22px 50px rgba(40,30,25,.16);
+  opacity:0;transform:translateY(25px) rotate(-2deg) scale(.97);
+  transition:opacity 1.3s ease .5s,transform 1.3s cubic-bezier(.2,.8,.2,1) .5s;
+}
+.memory.active .memory-photo{opacity:1;transform:translateY(0) rotate(-2deg) scale(1)}
+.memory-copy{
+  position:absolute;bottom:5%;left:0;right:0;text-align:center;
+  opacity:0;transform:translateY(15px);transition:all 1s ease 1.2s;
+}
+.memory.active .memory-copy{opacity:1;transform:none}
+.memory-copy .eyebrow{font-size:11px;letter-spacing:4px;color:var(--soft);margin-bottom:16px}
+.memory-copy h2{font-size:24px;font-weight:400;letter-spacing:3px}
+.memory-copy p{margin-top:18px;font-size:13px;color:#756d68;line-height:2;letter-spacing:1px}
+#memories{background:linear-gradient(145deg,#f8f4f0,#eee8e3)}
+.memory-stack{position:relative;width:min(520px,78vw);height:min(480px,68vh)}
+.mem-card{
+  position:absolute;width:210px;aspect-ratio:3/4;background:#fff;padding:7px 7px 27px;
+  box-shadow:0 18px 40px rgba(45,35,30,.12);opacity:0;
+  transition:opacity 1.2s ease,transform 1.4s cubic-bezier(.2,.8,.2,1);
+}
+.mem-card img{width:100%;height:100%;object-fit:cover}
+.mem-card.one{left:5%;top:12%;transform:rotate(-7deg) translateY(35px)}
+.mem-card.two{right:3%;top:3%;transform:rotate(6deg) translateY(35px)}
+.mem-card.three{left:30%;bottom:0;transform:rotate(-2deg) translateY(35px)}
+.memories.active .mem-card{opacity:1}
+.memories.active .mem-card.one{transform:rotate(-7deg) translateY(0);transition-delay:.2s}
+.memories.active .mem-card.two{transform:rotate(6deg) translateY(0);transition-delay:.65s}
+.memories.active .mem-card.three{transform:rotate(-2deg) translateY(0);transition-delay:1.1s}
+.memory-note{
+  position:absolute;bottom:3%;left:50%;transform:translateX(-50%);
+  width:100%;text-align:center;color:#6e6661;font-size:13px;line-height:2.1;
+  letter-spacing:1px;opacity:0;transition:opacity 1s ease 1.8s;
+}
+.memories.active .memory-note{opacity:1}
+.music-scene{background:radial-gradient(circle at 50% 45%,#f5efec 0,#e9e1dc 42%,#ddd3cd 100%)}
+.player-shell{display:flex;flex-direction:column;align-items:center;width:min(430px,88vw)}
+.record-player{width:min(310px,68vw);aspect-ratio:1;position:relative}
+.vinyl{
+  width:100%;height:100%;border-radius:50%;
+  background:repeating-radial-gradient(circle,#171717 0,#171717 2px,#202020 3px,#111 4px);
+  box-shadow:0 25px 60px rgba(20,15,12,.32),0 0 0 1px rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;
+  animation:spin 4s linear infinite;animation-play-state:paused;
+}
+.playing .vinyl{animation-play-state:running}
+.vinyl:after{content:"";position:absolute;width:62%;height:62%;border-radius:50%;border:1px solid rgba(255,255,255,.08)}
+.label{
+  width:38%;height:38%;border-radius:50%;background:url("photo.jpg") center/cover;
+  border:4px solid var(--rose);box-shadow:0 0 22px rgba(201,143,141,.35);z-index:2
+}
+.tonearm{
+  position:absolute;right:1%;top:-3%;width:40%;height:7px;border-radius:5px;
+  background:linear-gradient(#f2f0ed,#999);transform-origin:right center;
+  transform:rotate(-34deg);transition:transform 1s cubic-bezier(.4,0,.2,1);z-index:4;
+  box-shadow:0 4px 8px rgba(0,0,0,.18)
+}
+.tonearm:after{content:"";position:absolute;left:-8px;top:-3px;width:17px;height:13px;border-radius:50%;background:#444}
+.playing .tonearm{transform:rotate(6deg)}
+.music-caption{text-align:center;margin-top:38px}
+.music-caption .small{font-size:10px;letter-spacing:4px;color:#887d77}
+.music-caption h2{font-size:19px;font-weight:400;letter-spacing:3px;margin-top:12px}
+.lyrics{
+  width:100%;height:95px;margin-top:28px;overflow:hidden;text-align:center;
+  mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent);
+}
+.lyrics-inner{transition:transform .55s cubic-bezier(.25,.46,.45,.94)}
+.lyric{font-size:13px;color:#aaa;padding:9px 0;transition:.45s}
+.lyric.active{font-size:16px;color:#b87876;font-weight:500;text-shadow:0 0 15px rgba(184,120,118,.25)}
+.final-scene{background:#1b1918;color:#eee9e5;flex-direction:column;text-align:center}
+.final-kicker{font-size:10px;letter-spacing:5px;opacity:.4;margin-bottom:30px}
+.final-line{font-size:20px;line-height:2.3;letter-spacing:3px;font-weight:300;opacity:0;transform:translateY(12px);transition:all 1.2s ease}
+.final-line.show{opacity:.92;transform:none}
+.final-line.second{font-size:15px;letter-spacing:2px;margin-top:18px;color:#bdb5b0}
+.final-line.third{font-size:22px;margin-top:26px;color:#eee9e5}
+.letter-hint{
+  margin-top:65px;font-size:11px;letter-spacing:3px;color:#aaa19c;
+  opacity:0;transition:opacity 1s ease 1s
+}
+.final-scene.active .letter-hint{opacity:.65}
+.next{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  border:0;background:none;color:inherit;opacity:.35;font-size:10px;letter-spacing:3px;cursor:pointer
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:650px){
+  .scene-wrap{height:78vh;width:88vw}
+  .scene-date{left:2px}
+  .memory-photo{width:58vw}
+  .memory-copy{bottom:7%}
+  .memory-copy h2{font-size:21px}
+  .memory-stack{width:86vw;height:56vh}
+  .mem-card{width:42vw}
+  .mem-card.one{left:1%}
+  .mem-card.two{right:0}
+  .mem-card.three{left:29%}
+  .memory-note{font-size:12px}
+  .record-player{width:68vw}
+}
+</style>
 </head>
 <body>
+<div class="grain"></div>
 
-    <!-- 背景氛围光斑 -->
-    <div class="bg-glow"></div>
-    <div class="bg-glow"></div>
+<section id="intro" class="screen active">
+  <div class="intro-small">A LITTLE SOMETHING FOR YOU</div>
+  <div class="intro-title">你已经找到它了。<br>那就慢慢打开吧。</div>
+  <button class="open-btn" id="openBtn">打开</button>
+</section>
 
-    <div class="main-container">
-        <!-- 左边：照片墙 -->
-        <div class="left-gallery">
-            <div class="photo-wrap"><img src="photo.jpg" alt="照片1" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIxMTAiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlZWVlZWUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaXoOazleWKoOi9vTwvdGV4dD48L3N2Zz4='"></div>
-            <div class="photo-wrap"><img src="photo1.jpg" alt="照片2" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIxMTAiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlZWVlZWUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaXoOazleWKoOi9vTwvdGV4dD48L3N2Zz4='"></div>
-            <div class="photo-wrap"><img src="photo2.jpg" alt="照片3" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIxMTAiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlZWVlZWUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaXoOazleWKoOi9vTwvdGV4dD48L3N2Zz4='"></div>
-        </div>
-
-        <!-- 右边：唱片机 + 歌词 + 按钮 -->
-        <div class="right-player">
-            <div class="record-player" id="player-container">
-                <div class="tonearm"></div>
-                <div class="vinyl">
-                    <div class="vinyl-label"></div>
-                </div>
-            </div>
-            
-            <div class="lyrics-container" id="lyrics-container">
-                <div class="lyrics-inner" id="lyrics-inner"></div>
-            </div>
-
-            <button class="play-btn" id="play-btn" onclick="togglePlay()">
-                <span id="btn-icon">▶</span> 点击播放
-            </button>
-        </div>
+<section id="memory" class="screen memory">
+  <div class="scene-wrap">
+    <div class="scene-date">2024 · 10 · TAIYUAN</div>
+    <div class="memory-content">
+      <img class="memory-photo" src="photo.jpg" alt="我们的照片">
+      <div class="memory-copy">
+        <div class="eyebrow">第一次见面</div>
+        <h2>我们明明只见过一次</h2>
+        <p>第一次看电影 · 第一次吃饭 · 第一次牵手</p>
+        <p>我其实挺遗憾，当时没有和你好好散散步。</p>
+      </div>
     </div>
+  </div>
+  <button class="next" id="memoryNext">继续</button>
+</section>
 
-    <audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
+<section id="memories" class="screen memories">
+  <div class="memory-stack">
+    <div class="mem-card one"><img src="photo.jpg" alt=""></div>
+    <div class="mem-card two"><img src="photo1.jpg" alt=""></div>
+    <div class="mem-card three"><img src="photo2.jpg" alt=""></div>
+    <div class="memory-note">
+      后来，我们走散过。<br>
+      又重新走回来过。<br>
+      一路跌跌撞撞，直到今天。
+    </div>
+  </div>
+  <button class="next" id="memoriesNext">继续</button>
+</section>
 
-    <script>
-        var audio = document.getElementById('bg-music');
-        var btn = document.getElementById('play-btn');
-        var container = document.getElementById('player-container');
-        var lyricsInner = document.getElementById('lyrics-inner');
-        var lyricsContainer = document.getElementById('lyrics-container');
+<section id="music" class="screen music-scene">
+  <div class="player-shell" id="playerShell">
+    <div class="record-player">
+      <div class="tonearm"></div>
+      <div class="vinyl"><div class="label"></div></div>
+    </div>
+    <div class="music-caption">
+      <div class="small">A SONG FOR US</div>
+      <h2>多远都要在一起</h2>
+    </div>
+    <div class="lyrics"><div class="lyrics-inner" id="lyricsInner"></div></div>
+  </div>
+</section>
 
-        // 歌词时间轴
-        const lyricsData = [
-            { time: 0, text: "作曲 : G.E.M.邓紫棋" },
-            { time: 1, text: "作词 : G.E.M.邓紫棋" },
-            { time: 14.25, text: "想听你听过的音乐 想看你看过的小说" },
-            { time: 20.16, text: "我想收集每一刻 我想看到你眼里的世界" },
-            { time: 28.44, text: "想到你到过的地方 和你曾度过的时光" },
-            { time: 34.17, text: "不想错过每一刻 多希望我一直在你身旁" },
-            { time: 42.80, text: "未来何从何去 你快乐我也就没关系" },
-            { time: 48.41, text: "对你我最熟悉 你爱自由我却更爱你" },
-            { time: 55.56, text: "我能习惯远距离 爱总是身不由己" },
-            { time: 62.37, text: "宁愿换个方式至少还能遥远爱着你" },
-            { time: 69.50, text: "爱能克服远距离 多远都要在一起" },
-            { time: 76.57, text: "你已经不再存在我世界里 请不要离开我的回忆" },
-            { time: 88.40, text: "想你说爱我的语气 想你望着我的眼睛" },
-            { time: 94.22, text: "不想忘记每一刻 用思念让我们一直前进" },
-            { time: 104.85, text: "想象你失落的唇印 想象你失约的旅行" },
-            { time: 110.70, text: "想象你离开的一刻 如果我有留下你的勇气" },
-            { time: 118.00, text: "我能习惯远距离 爱总是身不由己" },
-            { time: 126.06, text: "宁愿换个方式至少还能遥远爱着你" },
-            { time: 133.36, text: "爱能克服远距离 多远都要在一起" },
-            { time: 140.09, text: "我已经不再存在你的心里 就让我独自守着回忆" },
-            { time: 148.70, text: "如果阳光永远都炽热" },
-            { time: 152.40, text: "如果彩虹不会掉颜色" },
-            { time: 156.00, text: "你能不能不离开呢" },
-            { time: 163.30, text: "我能习惯远距离 爱总是身不由己" },
-            { time: 170.60, text: "宁愿换个方式至少还能遥远爱着你" },
-            { time: 177.80, text: "爱能克服远距离 多远都要在一起" },
-            { time: 184.70, text: "你已经不再存在我世界里 请不要离开我的回忆" },
-            { time: 198.00, text: "请不要离开 我的回忆" }
-        ];
+<section id="final" class="screen final-scene">
+  <div class="final-kicker">THE END OF THIS SONG</div>
+  <div class="final-line" id="f1">这一路，我们走得并不容易。</div>
+  <div class="final-line second" id="f2">跌跌撞撞，分开过，也重新走回来过。</div>
+  <div class="final-line third" id="f3">我们要走很远很远。</div>
+  <div class="letter-hint">还有一封信，回去看看吧。</div>
+</section>
 
-        lyricsData.forEach((item, index) => {
-            let div = document.createElement('div');
-            div.className = 'lyric-line';
-            div.id = 'lyric-' + index;
-            div.innerText = item.text;
-            lyricsInner.appendChild(div);
-        });
+<audio id="bgMusic" src="music.mp3" preload="auto"></audio>
 
-        let currentLyricIndex = -1;
+<script>
+const $=id=>document.getElementById(id);
+const screens={intro:$("intro"),memory:$("memory"),memories:$("memories"),music:$("music"),final:$("final")};
+const audio=$("bgMusic"), player=$("playerShell");
 
-        audio.addEventListener('timeupdate', function() {
-            let currentTime = audio.currentTime;
-            let newIndex = -1;
-            
-            for (let i = 0; i < lyricsData.length; i++) {
-                if (currentTime >= lyricsData[i].time) {
-                    newIndex = i;
-                } else {
-                    break;
-                }
-            }
+function show(name){
+  Object.values(screens).forEach(s=>s.classList.remove("active"));
+  screens[name].classList.add("active");
+}
 
-            if (newIndex !== -1 && newIndex !== currentLyricIndex) {
-                if (currentLyricIndex !== -1) {
-                    let prevLine = document.getElementById('lyric-' + currentLyricIndex);
-                    if(prevLine) prevLine.classList.remove('active');
-                }
-                
-                currentLyricIndex = newIndex;
-                let currentLine = document.getElementById('lyric-' + currentLyricIndex);
-                if(currentLine) {
-                    currentLine.classList.add('active');
-                    let offset = currentLyricIndex * currentLine.offsetHeight;
-                    let containerHeight = lyricsContainer.offsetHeight;
-                    let translateY = offset - containerHeight / 2 + currentLine.offsetHeight / 2;
-                    lyricsInner.style.transform = `translateY(-${translateY}px)`;
-                }
-            }
-        });
-
-        function togglePlay() {
-            if (audio.paused) {
-                audio.play();
-                btn.classList.add('playing');
-                container.classList.add('playing');
-                btn.innerHTML = '<span id="btn-icon">❚❚</span> 正在播放...';
-            } else {
-                audio.pause();
-                btn.classList.remove('playing');
-                container.classList.remove('playing');
-                btn.innerHTML = '<span id="btn-icon">▶</span> 继续播放';
-            }
-        }
-
-        audio.addEventListener('ended', function() {
-            btn.classList.remove('playing');
-            container.classList.remove('playing');
-            btn.innerHTML = '<span id="btn-icon">▶</span> 点击播放';
-            currentLyricIndex = -1;
-            lyricsInner.style.transform = 'translateY(0px)';
-            document.querySelectorAll('.lyric-line').forEach(el => el.classList.remove('active'));
-        });
-    </script>
+const lyricsData=[
+ {time:0,text:"作曲 : G.E.M.邓紫棋"},
+ {time:1,text:"作词 : G.E.M.邓紫棋"},
+ {time:14.25,text:"想听你听过的音乐 想看你看过的小说"},
+ {time:20.16,text:"我想收集每一刻 我想看到你眼里的世界"},
+ {time:28.44,text:"想到你到过的地方 和你曾度过的时光"},
+ {time:34.17,text:"不想错过每一刻 多希望我一直在你身旁"},
+ {time:42.80,text:"未来何从何去 你快乐我也就没关系"},
+ {time:48.41,text:"对你我最熟悉 你爱自由我却更爱你"},
+ {time:55.56,text:"我能习惯远距离 爱总是身不由己"},
+ {time:62.37,text:"宁愿换个方式至少还能遥远爱着你"},
+ {time:69.50,text:"爱能克服远距离 多远都要在一起"},
+ {time:76.57,text:"你已经不再存在我世界里 请不要离开我的回忆"},
+ {time:88.40,text:"想你说爱我的语气 想你望着我的眼睛"},
+ {time:94.22,text:"不想忘记每一刻 用思念让我们一直前进"},
+ {time:104.85,text:"想象你失落的唇印 想象你失约的旅行"},
+ {time:110.70,text:"想象你离开的一刻 如果我有留下你的勇气"},
+ {time:118.00,text:"我能习惯远距离 爱总是身不由己"},
+ {time:126.06,text:"宁愿换个方式至少还能遥远爱着你"},
+ {time:133.36,text:"爱能克服远距离 多远都要在一起"},
+ {time:140.09,text:"我已经不再存在你的心里 就让我独自守着回忆"},
+ {time:148.70,text:"如果阳光永远都炽热"},
+ {time:152.40,text:"如果彩虹不会掉颜色"},
+ {time:156.00,text:"你能不能不离开呢"},
+ {time:163.30,text:"我能习惯远距离 爱总是身不由己"},
+ {time:170.60,text:"宁愿换个方式至少还能遥远爱着你"},
+ {time:177.80,text:"爱能克服远距离 多远都要在一起"},
+ {time:184.70,text:"你已经不再存在我世界里 请不要离开我的回忆"},
+ {time:198.00,text:"请不要离开 我的回忆"}
+];
+lyricsData.forEach((x,i)=>{
+  const d=document.createElement("div");d.className="lyric";d.id="lyric-"+i;d.textContent=x.text;$("lyricsInner").appendChild(d)
+});
+let lyricIndex=-1;
+audio.addEventListener("timeupdate",()=>{
+  let n=-1;
+  for(let i=0;i<lyricsData.length;i++){if(audio.currentTime>=lyricsData[i].time)n=i;else break}
+  if(n!==lyricIndex){
+    if(lyricIndex>=0)$("lyric-"+lyricIndex)?.classList.remove("active");
+    lyricIndex=n;
+    if(n>=0){
+      const el=$("lyric-"+n);el.classList.add("active");
+      $("lyricsInner").style.transform=`translateY(-${Math.max(0,n*35-45)}px)`;
+    }
+  }
+});
+$("openBtn").addEventListener("click",async()=>{
+  show("memory");
+  setTimeout(()=>screens.memory.classList.add("active"),0);
+  // 用户已经点击页面，因此这里是移动端最自然的音乐启动时机。
+  try{await audio.play();player.classList.add("playing");}catch(e){}
+});
+$("memoryNext").addEventListener("click",()=>show("memories"));
+$("memoriesNext").addEventListener("click",()=>{
+  show("music");
+  player.classList.add("playing");
+  audio.play().catch(()=>{});
+});
+audio.addEventListener("ended",()=>{
+  player.classList.remove("playing");
+  show("final");
+  setTimeout(()=>$("f1").classList.add("show"),500);
+  setTimeout(()=>$("f2").classList.add("show"),1800);
+  setTimeout(()=>$("f3").classList.add("show"),3200);
+});
+</script>
 </body>
 </html>
