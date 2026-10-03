@@ -13,59 +13,100 @@
             font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
             color: #333;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             padding: 20px;
             overflow-x: hidden;
         }
 
-        /* ========== 顶部照片墙 ========== */
-        .gallery {
+        /* ========== 整体主容器 ========== */
+        .main-container {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 25px;
-            margin-top: 10px;
-        }
-        .photo-wrap {
-            background: white;
-            padding: 6px 6px 18px 6px; /* 模拟拍立得底部留白 */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            border-radius: 4px;
-            transition: transform 0.3s ease;
-        }
-        /* 错落有致的倾斜角度 */
-        .photo-wrap:nth-child(1) { transform: rotate(-8deg) translateY(5px); }
-        .photo-wrap:nth-child(2) { transform: rotate(3deg) translateY(-5px); z-index: 2; }
-        .photo-wrap:nth-child(3) { transform: rotate(10deg) translateY(8px); }
-        
-        .photo-wrap img {
-            width: 85px;
-            height: 85px;
-            object-fit: cover;
-            border-radius: 2px;
+            align-items: center;
+            gap: 50px;
+            max-width: 900px;
+            width: 100%;
         }
 
-        /* ========== 中部：唱片机与歌词 ========== */
-        .player-container {
+        /* ========== 左边：悬挂照片墙 ========== */
+        .left-gallery {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 10px 30px;
+            /* 悬挂的线 */
+            border-left: 2px solid #ccc;
+        }
+        /* 线上的小夹子效果 */
+        .left-gallery::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0; left: -8px;
+            width: 14px;
+            background: repeating-linear-gradient(to bottom, transparent, transparent 20px, #ccc 20px, #ccc 22px);
+            opacity: 0.3;
+        }
+
+        .photo-wrap {
+            background: white;
+            padding: 6px 6px 18px 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 2px;
+            transition: transform 0.3s ease;
+            position: relative;
+            /* 模拟挂在墙上的轻微倾斜 */
+        }
+        .photo-wrap:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+            z-index: 10;
+        }
+        /* 挂线夹子（上方小孔） */
+        .photo-wrap::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            background: #888;
+            border-radius: 50%;
+            box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+        }
+        .photo-wrap:nth-child(1) { transform: rotate(-5deg); margin-left: -20px; }
+        .photo-wrap:nth-child(2) { transform: rotate(4deg); margin-left: 20px; }
+        .photo-wrap:nth-child(3) { transform: rotate(-3deg); margin-left: -10px; }
+
+        .photo-wrap img {
+            width: 90px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 1px;
+        }
+
+        /* ========== 右边：唱片机与歌词 ========== */
+        .right-player {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
             border-radius: 24px;
-            padding: 20px;
+            padding: 30px 25px;
             width: 100%;
             max-width: 380px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            display: flex;
-            gap: 15px;
-            align-items: center;
         }
 
-        /* 黑胶唱片机 */
+        /* 黑胶唱片机（放大版） */
         .record-player {
             position: relative;
-            width: 110px;
-            height: 110px;
-            flex-shrink: 0;
+            width: 170px;
+            height: 170px;
+            margin-bottom: 25px;
         }
         .vinyl {
             width: 100%;
@@ -76,9 +117,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
             animation: spin 4s linear infinite;
-            animation-play-state: paused; /* 默认暂停 */
+            animation-play-state: paused;
         }
         .vinyl::before {
             content: '';
@@ -87,63 +128,67 @@
             height: 80%;
             border-radius: 50%;
             border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
         }
-        /* 黑胶中间的贴纸（也是照片） */
+        /* 黑胶中间贴纸 */
         .vinyl-label {
             width: 40%;
             height: 40%;
             border-radius: 50%;
-            background-image: url('photo.jpg');
+            background-image: url('photo.jpg'); /* 这里会自动用你的第一张照片 */
             background-size: cover;
             background-position: center;
             z-index: 2;
-            border: 2px solid #ff6b81;
+            border: 3px solid #ff6b81;
+            box-shadow: 0 0 10px rgba(255,107,129,0.5);
         }
-        /* 唱臂 */
+        /* 唱臂（放大版） */
         .tonearm {
             position: absolute;
-            top: -5px;
-            right: 0px;
-            width: 40px;
-            height: 5px;
-            background: #aaa;
+            top: -10px;
+            right: 5px;
+            width: 60px;
+            height: 6px;
+            background: #999;
             border-radius: 5px;
             transform-origin: right center;
-            transform: rotate(-30deg); /* 初始状态离开唱片 */
+            transform: rotate(-35deg);
             transition: transform 0.5s ease;
             z-index: 3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         .tonearm::after {
             content: '';
             position: absolute;
-            left: -5px;
-            top: -2px;
-            width: 10px;
-            height: 10px;
-            background: #666;
+            left: -8px;
+            top: -3px;
+            width: 14px;
+            height: 12px;
+            background: #555;
             border-radius: 50%;
         }
         
-        /* 播放时的状态 */
+        /* 播放状态 */
         .playing .vinyl { animation-play-state: running; }
-        .playing .tonearm { transform: rotate(10deg); } /* 播放时唱臂搭上 */
+        .playing .tonearm { transform: rotate(5deg); }
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* 歌词区 */
         .lyrics-container {
-            flex-grow: 1;
-            height: 110px;
+            width: 100%;
+            height: 100px;
             overflow: hidden;
             position: relative;
             mask-image: linear-gradient(transparent, black 20%, black 80%, transparent);
             -webkit-mask-image: linear-gradient(transparent, black 20%, black 80%, transparent);
+            margin-bottom: 25px;
         }
         .lyrics-inner {
             transition: transform 0.4s ease;
         }
         .lyric-line {
-            font-size: 13px;
+            font-size: 14px;
             color: #999;
             padding: 8px 0;
             text-align: center;
@@ -152,13 +197,12 @@
         .lyric-line.active {
             color: #ff6b81;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 16px;
             transform: scale(1.05);
         }
 
-        /* ========== 底部播放按钮 ========== */
+        /* 播放按钮 */
         .play-btn {
-            margin-top: 30px;
             background: linear-gradient(135deg, #ff6b81, #ff9a9e);
             color: white;
             border: none;
@@ -179,36 +223,58 @@
         }
 
         #bg-music { display: none; }
+
+        /* ========== 手机屏幕适配（上下排列） ========== */
+        @media (max-width: 650px) {
+            .main-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .left-gallery {
+                flex-direction: row;
+                border-left: none;
+                border-bottom: 2px solid #ccc;
+                padding: 10px 0 20px 0;
+                width: 100%;
+                justify-content: center;
+            }
+            .left-gallery::before { display: none; }
+            .photo-wrap:nth-child(1) { margin-left: 0; }
+            .photo-wrap:nth-child(2) { margin-left: 0; }
+            .photo-wrap:nth-child(3) { margin-left: 0; }
+            .photo-wrap img { width: 75px; height: 95px; }
+            .right-player { padding: 25px 15px; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 1. 照片墙 (如果名字不对应，请修改这里的 src) -->
-    <div class="gallery">
-        <div class="photo-wrap"><img src="photo.jpg" alt="照片1"></div>
-        <div class="photo-wrap"><img src="photo1.jpg" alt="照片2"></div>
-        <div class="photo-wrap"><img src="photo2.jpg" alt="照片3"></div>
-    </div>
-
-    <!-- 2. 唱片机与歌词 -->
-    <div class="player-container" id="player-container">
-        <div class="record-player">
-            <div class="tonearm"></div>
-            <div class="vinyl">
-                <div class="vinyl-label"></div>
-            </div>
+    <div class="main-container">
+        <!-- 左边：照片墙 -->
+        <div class="left-gallery">
+            <div class="photo-wrap"><img src="photo.jpg" alt="照片1" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIxMTAiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlZWVlZWUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaXoOazleWKoOi9vTwvdGV4dD48L3N2Zz4='"></div>
+            <div class="photo-wrap"><img src="photo1.jpg" alt="照片2" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIxMTAiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlZWVlZWUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaXoOazleWKoOi9vTwvdGV4dD48L3N2Zz4='"></div>
+            <div class="photo-wrap"><img src="photo2.jpg" alt="照片3" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MCIgaGVpZ2h0PSIxMTAiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlZWVlZWUiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuaXoOazleWKoOi9vTwvdGV4dD48L3N2Zz4='"></div>
         </div>
-        <div class="lyrics-container" id="lyrics-container">
-            <div class="lyrics-inner" id="lyrics-inner">
-                <!-- 歌词会由JS动态插入 -->
+
+        <!-- 右边：唱片机 + 歌词 + 按钮 -->
+        <div class="right-player">
+            <div class="record-player" id="player-container">
+                <div class="tonearm"></div>
+                <div class="vinyl">
+                    <div class="vinyl-label"></div>
+                </div>
             </div>
+            
+            <div class="lyrics-container" id="lyrics-container">
+                <div class="lyrics-inner" id="lyrics-inner"></div>
+            </div>
+
+            <button class="play-btn" id="play-btn" onclick="togglePlay()">
+                <span id="btn-icon">▶</span> 点击播放
+            </button>
         </div>
     </div>
-
-    <!-- 3. 播放按钮 -->
-    <button class="play-btn" id="play-btn" onclick="togglePlay()">
-        <span id="btn-icon">▶</span> 点击播放
-    </button>
 
     <audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
 
@@ -219,9 +285,7 @@
         var lyricsInner = document.getElementById('lyrics-inner');
         var lyricsContainer = document.getElementById('lyrics-container');
 
-        // ==========================================
-        // ✅ 已经帮你精准转换好的歌词时间轴
-        // ==========================================
+        // 歌词时间轴
         const lyricsData = [
             { time: 0, text: "作曲 : G.E.M.邓紫棋" },
             { time: 1, text: "作词 : G.E.M.邓紫棋" },
@@ -253,7 +317,6 @@
             { time: 198.00, text: "请不要离开 我的回忆" }
         ];
 
-        // 初始化歌词DOM
         lyricsData.forEach((item, index) => {
             let div = document.createElement('div');
             div.className = 'lyric-line';
@@ -264,12 +327,10 @@
 
         let currentLyricIndex = -1;
 
-        // 监听播放进度，同步歌词
         audio.addEventListener('timeupdate', function() {
             let currentTime = audio.currentTime;
             let newIndex = -1;
             
-            // 找到当前时间对应的歌词索引
             for (let i = 0; i < lyricsData.length; i++) {
                 if (currentTime >= lyricsData[i].time) {
                     newIndex = i;
@@ -279,19 +340,15 @@
             }
 
             if (newIndex !== -1 && newIndex !== currentLyricIndex) {
-                // 移除上一句的高亮
                 if (currentLyricIndex !== -1) {
                     let prevLine = document.getElementById('lyric-' + currentLyricIndex);
                     if(prevLine) prevLine.classList.remove('active');
                 }
                 
-                // 高亮当前句
                 currentLyricIndex = newIndex;
                 let currentLine = document.getElementById('lyric-' + currentLyricIndex);
                 if(currentLine) {
                     currentLine.classList.add('active');
-                    
-                    // 歌词向上滚动逻辑 (让当前这句保持在正中间)
                     let offset = currentLyricIndex * currentLine.offsetHeight;
                     let containerHeight = lyricsContainer.offsetHeight;
                     let translateY = offset - containerHeight / 2 + currentLine.offsetHeight / 2;
@@ -300,7 +357,6 @@
             }
         });
 
-        // 播放/暂停控制
         function togglePlay() {
             if (audio.paused) {
                 audio.play();
@@ -315,7 +371,6 @@
             }
         }
 
-        // 音乐播放结束重置状态
         audio.addEventListener('ended', function() {
             btn.classList.remove('playing');
             container.classList.remove('playing');
