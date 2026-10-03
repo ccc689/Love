@@ -55,22 +55,23 @@ button{font:inherit}
 .scene-date{
   position:absolute;top:0;left:0;font-family:Georgia,serif;font-size:11px;
   letter-spacing:4px;color:var(--soft);opacity:0;transform:translateY(8px);
-  transition:all 1s ease .4s;
+  transition:all 1s ease .3s;
 }
 .memory.active .scene-date{opacity:1;transform:none}
 .memory-content{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
 }
 .memory-photo{
-  width:min(270px,62vw);aspect-ratio:3/4;object-fit:cover;
-  box-shadow:0 22px 50px rgba(40,30,25,.16);
-  opacity:0;transform:translateY(25px) rotate(-2deg) scale(.97);
-  transition:opacity 1.3s ease .5s,transform 1.3s cubic-bezier(.2,.8,.2,1) .5s;
+  width:min(330px,68vw);height:min(500px,58vh);
+  object-fit:contain;
+  filter:drop-shadow(0 22px 50px rgba(40,30,25,.16));
+  opacity:0;transform:translateY(25px) rotate(-1.5deg) scale(.97);
+  transition:opacity 1.3s ease .45s,transform 1.3s cubic-bezier(.2,.8,.2,1) .45s;
 }
-.memory.active .memory-photo{opacity:1;transform:translateY(0) rotate(-2deg) scale(1)}
+.memory.active .memory-photo{opacity:1;transform:translateY(0) rotate(-1.5deg) scale(1)}
 .memory-copy{
   position:absolute;bottom:5%;left:0;right:0;text-align:center;
-  opacity:0;transform:translateY(15px);transition:all 1s ease 1.2s;
+  opacity:0;transform:translateY(15px);transition:all 1s ease .95s;
 }
 .memory.active .memory-copy{opacity:1;transform:none}
 .memory-copy .eyebrow{font-size:11px;letter-spacing:4px;color:var(--soft);margin-bottom:16px}
@@ -79,26 +80,54 @@ button{font:inherit}
 
 /* 3. 第一次见面 */
 .meeting{background:#f7f3ef;text-align:center}
-.meeting-copy{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transform:translateY(14px);transition:all 1.1s ease .35s}
+.meeting-copy{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(14px);transition:all 1.1s ease .25s
+}
 .meeting.active .meeting-copy{opacity:1;transform:none}
 .meeting-copy .eyebrow,.portrait-head .eyebrow{font-size:10px;letter-spacing:4px;color:var(--soft);margin-bottom:18px}
 .meeting-copy h2{font-size:24px;font-weight:400;letter-spacing:3px}
 .meeting-copy p{margin-top:18px;font-size:13px;color:#756d68;line-height:2;letter-spacing:1px}
 
-/* 4. 照片轮播 */
+/* 4. 她后来不同时期的照片 */
 #memories{background:linear-gradient(145deg,#f8f4f0,#ece6e0)}
-.portrait-stage{width:min(680px,90vw);height:min(760px,90vh);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.portrait-head{text-align:center;position:absolute;top:6%;opacity:0;transform:translateY(-10px);transition:all 1s ease .2s}
+.portrait-stage{
+  width:min(680px,90vw);height:min(760px,90vh);position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.portrait-head{
+  text-align:center;position:absolute;top:6%;opacity:0;transform:translateY(-10px);
+  transition:all 1s ease .15s;z-index:2;
+}
 .memories.active .portrait-head{opacity:1;transform:none}
 .portrait-note{font-size:14px;color:#6e6661;letter-spacing:2px;line-height:1.9}
-.portrait-counter{position:absolute;top:7%;right:0;font-family:Georgia,serif;font-size:12px;letter-spacing:3px;color:#8b817b;opacity:.8}
+.portrait-counter{
+  position:absolute;top:7%;right:0;font-family:Georgia,serif;font-size:12px;
+  letter-spacing:3px;color:#8b817b;opacity:.8;z-index:2;
+}
 .portrait-counter i{font-style:normal;margin:0 5px;opacity:.5}
-.portrait-frame{position:relative;width:min(330px,68vw);height:min(500px,62vh);display:flex;align-items:center;justify-content:center;margin-top:34px}
-.portrait-card{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(18px) scale(.985) rotate(-1deg);transition:opacity 1.1s ease,transform 1.15s cubic-bezier(.2,.8,.2,1)}
+.portrait-frame{
+  position:relative;width:min(330px,68vw);height:min(500px,62vh);
+  display:flex;align-items:center;justify-content:center;margin-top:34px;
+}
+.portrait-card{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(18px) scale(.985) rotate(-1deg);
+  transition:opacity 1.05s ease,transform 1.15s cubic-bezier(.2,.8,.2,1);
+}
 .portrait-card.active{opacity:1;transform:translateY(0) scale(1) rotate(-1deg)}
-.portrait-card img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;object-fit:contain;box-shadow:0 24px 55px rgba(40,30,25,.15);background:#fff;padding:7px}
-.portrait-progress{position:absolute;bottom:5%;width:min(300px,60vw);height:1px;background:rgba(39,35,33,.12);overflow:hidden}
-.portrait-progress span{display:block;width:12.5%;height:100%;background:var(--rose);transform-origin:left center;transition:width .45s ease}
+.portrait-card img{
+  max-width:100%;max-height:100%;width:auto;height:auto;display:block;
+  object-fit:contain;box-shadow:0 24px 55px rgba(40,30,25,.15);background:#fff;padding:7px;
+}
+.portrait-progress{
+  position:absolute;bottom:5%;width:min(300px,60vw);height:1px;
+  background:rgba(39,35,33,.12);overflow:hidden;
+}
+.portrait-progress span{
+  display:block;width:0;height:100%;background:var(--rose);transform-origin:left center;
+  transition:width .4s ease;
+}
 
 /* 5. 黑胶唱片 */
 .music-scene{background:radial-gradient(circle at 50% 45%,#f5efec 0,#e9e1dc 42%,#ddd3cd 100%)}
@@ -112,9 +141,11 @@ button{font:inherit}
   animation:spin 4s linear infinite;animation-play-state:paused;
 }
 .playing .vinyl{animation-play-state:running}
+.is-playing .vinyl{animation-play-state:running}
+.is-playing .tonearm{transform:rotate(6deg)}
 .vinyl:after{content:"";position:absolute;width:62%;height:62%;border-radius:50%;border:1px solid rgba(255,255,255,.08)}
 .label{
-  width:38%;height:38%;border-radius:50%;background:url("photo.jpg") center/cover;
+  width:38%;height:38%;border-radius:50%;background:url("photo.jpg") center/cover no-repeat;
   border:4px solid var(--rose);box-shadow:0 0 22px rgba(201,143,141,.35);z-index:2
 }
 .tonearm{
@@ -137,8 +168,10 @@ button{font:inherit}
 .lyric{font-size:13px;color:#aaa;padding:9px 0;transition:.45s}
 .lyric.active{font-size:16px;color:#b87876;font-weight:500;text-shadow:0 0 15px rgba(184,120,118,.25)}
 
-/* 6. 结局 & 烟花 & 蛋糕 */
-.final-scene{background:#1b1918;color:#eee9e5;flex-direction:column;text-align:center;padding:0 30px;}
+/* 6. 结局 */
+.final-scene{
+  background:#1b1918;color:#eee9e5;flex-direction:column;text-align:center;padding:0 30px;
+}
 .final-kicker{font-size:10px;letter-spacing:5px;opacity:.4;margin-bottom:30px}
 .final-line{font-size:20px;line-height:2.3;letter-spacing:3px;font-weight:300;opacity:0;transform:translateY(12px);transition:all 1.2s ease}
 .final-line.show{opacity:.92;transform:none}
@@ -151,52 +184,56 @@ button{font:inherit}
 }
 .final-scene.active .letter-hint.show-hint{opacity:.65;transform:none}
 
-#fireworks-canvas {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: 30; display: none;
+/* 7. 烟花和蛋糕 */
+#fireworks-canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:30;display:none;
 }
+.cake-wrapper{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.3);
+  opacity:0;transition:all 2.5s cubic-bezier(.175,.885,.32,1.275);
+  z-index:40;pointer-events:none;
+}
+.cake-wrapper.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.cake-svg{width:220px;height:220px;filter:drop-shadow(0 15px 35px rgba(255,107,129,.4))}
 
-.cake-wrapper {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%) scale(0.3);
-  opacity: 0;
-  transition: all 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  z-index: 40;
-  pointer-events: none;
+/* 8. 暂停按钮 */
+.pause-btn{
+  position:fixed;top:20px;right:20px;background:rgba(0,0,0,.3);color:#fff;
+  border:none;border-radius:50%;width:45px;height:45px;font-size:16px;cursor:pointer;z-index:100;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(5px);
+  transition:all .3s;box-shadow:0 2px 10px rgba(0,0,0,.2);opacity:0;visibility:hidden;
 }
-.cake-wrapper.show {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-.cake-svg {
-  width: 220px; height: 220px;
-  filter: drop-shadow(0 15px 35px rgba(255, 107, 129, 0.4));
-}
+.pause-btn.show{opacity:1;visibility:visible}
+.pause-btn:hover{background:rgba(0,0,0,.6)}
 
 @keyframes spin{to{transform:rotate(360deg)}}
 
 @media(max-width:650px){
   .scene-wrap{height:78vh;width:88vw}
   .scene-date{left:2px}
-  .memory-photo{width:58vw}
+  .memory-photo{width:70vw;height:48vh}
   .memory-copy{bottom:7%}
   .memory-copy h2{font-size:21px}
   .meeting-copy h2{font-size:21px}
+  .meeting-copy p{font-size:12px;padding:0 12px}
   .portrait-stage{width:90vw;height:78vh}
-  .portrait-head{top:4%}
+  .portrait-head{top:4%;padding:0 10px}
   .portrait-counter{right:4%;top:5%}
   .portrait-frame{width:74vw;height:54vh;margin-top:24px}
   .portrait-note{font-size:12px}
   .portrait-progress{bottom:4%;width:58vw}
   .record-player{width:68vw}
-  .final-line.fourth { font-size: 22px; }
-  .cake-svg { width: 180px; height: 180px; }
+  .final-line.fourth{font-size:22px}
+  .cake-svg{width:180px;height:180px}
+  .pause-btn{width:40px;height:40px;font-size:15px;top:15px;right:15px}
 }
 </style>
 </head>
 <body>
 <div class="grain"></div>
+
+<button class="pause-btn" id="pauseBtn" title="暂停" aria-label="暂停">Ⅱ</button>
 
 <section id="intro" class="screen active">
   <div class="intro-small">A LITTLE BIRTHDAY GIFT FOR YOU</div>
@@ -208,10 +245,10 @@ button{font:inherit}
   <div class="scene-wrap">
     <div class="scene-date">2024 · 10 · TAIYUAN</div>
     <div class="memory-content">
-      <img class="memory-photo" src="photo.jpg" alt="那天我们在太原相见">
+      <img class="memory-photo" src="photo.jpg" alt="那一天我们都在太原" onerror="this.style.display='none'">
       <div class="memory-copy">
-        <div class="eyebrow">那一天</div>
-        <h2>那时候，我舍不得离开。</h2>
+        <div class="eyebrow">那一天我们在太原第一次相见</div>
+        <h2>那时候，我舍不得离开，我会记住一辈子。</h2>
         <p>后来想想，我们再多见面会不会更好。</p>
       </div>
     </div>
@@ -224,7 +261,7 @@ button{font:inherit}
       <div class="eyebrow">第一次见面</div>
       <h2>第一次见面，第一次牵手</h2>
       <p>第一次看电影 · 第一次吃饭 · 第一次牵手</p>
-      <p>我其实挺遗憾，当时没有和你好好散散步。</p>
+      <p>我其实挺遗憾，当时没有和你好好牵着手漫步在太原的夜晚。</p>
     </div>
   </div>
 </section>
@@ -237,14 +274,14 @@ button{font:inherit}
     </div>
     <div class="portrait-counter"><span id="portraitCurrent">01</span><i>/</i>08</div>
     <div class="portrait-frame">
-      <div class="portrait-card active"><img src="photo1.jpg" alt="" loading="eager"></div>
-      <div class="portrait-card"><img src="photo2.jpg" alt="" loading="lazy"></div>
-      <div class="portrait-card"><img src="photo3.jpg" alt="" loading="lazy"></div>
-      <div class="portrait-card"><img src="photo4.jpg" alt="" loading="lazy"></div>
-      <div class="portrait-card"><img src="photo5.jpg" alt="" loading="lazy"></div>
-      <div class="portrait-card"><img src="photo6.jpg" alt="" loading="lazy"></div>
-      <div class="portrait-card"><img src="photo7.jpg" alt="" loading="lazy"></div>
-      <div class="portrait-card"><img src="photo8.jpg" alt="" loading="lazy"></div>
+      <div class="portrait-card active"><img src="photo1.jpg" alt="她的第一个时期" loading="eager"></div>
+      <div class="portrait-card"><img src="photo2.jpg" alt="她的第二个时期" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo3.jpg" alt="她的第三个时期" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo4.jpg" alt="她的第四个时期" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo5.jpg" alt="她的第五个时期" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo6.jpg" alt="她的第六个时期" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo7.jpg" alt="她的第七个时期" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo8.jpg" alt="她的第八个时期" loading="lazy"></div>
     </div>
     <div class="portrait-progress"><span id="portraitProgress"></span></div>
   </div>
@@ -276,7 +313,7 @@ button{font:inherit}
 <canvas id="fireworks-canvas"></canvas>
 
 <div class="cake-wrapper" id="cakeWrapper">
-  <svg class="cake-svg" viewBox="0 0 200 200">
+  <svg class="cake-svg" viewBox="0 0 200 200" aria-hidden="true">
     <ellipse cx="100" cy="165" rx="75" ry="18" fill="#f7e2d1"/>
     <rect x="25" y="130" width="150" height="35" fill="#e8c7b6" rx="6"/>
     <ellipse cx="100" cy="130" rx="75" ry="18" fill="#f7e2d1"/>
@@ -296,253 +333,358 @@ button{font:inherit}
   </svg>
 </div>
 
-<audio id="bgMusic" src="music.wav" preload="auto"></audio>
+<audio id="bgMusic" src="music.mp3" preload="auto"></audio>
 
 <script>
 const $=id=>document.getElementById(id);
-const screens={intro:$("intro"),memory:$("memory"),meeting:$("meeting"),memories:$("memories"),music:$("music"),final:$("final")};
-const audio=$("bgMusic"), player=$("playerShell");
-
-function show(name){
-  Object.values(screens).forEach(s=>s.classList.remove("active"));
-  screens[name].classList.add("active");
-}
-
-const lyricsData=[
- {time:0,text:"作曲 : G.E.M.邓紫棋"},
- {time:1,text:"作词 : G.E.M.邓紫棋"},
- {time:14.25,text:"想听你听过的音乐 想看你看过的小说"},
- {time:20.16,text:"我想收集每一刻 我想看到你眼里的世界"},
- {time:28.44,text:"想到你到过的地方 和你曾度过的时光"},
- {time:34.17,text:"不想错过每一刻 多希望我一直在你身旁"},
- {time:42.80,text:"未来何从何去 你快乐我也就没关系"},
- {time:48.41,text:"对你我最熟悉 你爱自由我却更爱你"},
- {time:55.56,text:"我能习惯远距离 爱总是身不由己"},
- {time:62.37,text:"宁愿换个方式至少还能遥远爱着你"},
- {time:69.50,text:"爱能克服远距离 多远都要在一起"},
- {time:76.57,text:"你已经不再存在我世界里 请不要离开我的回忆"},
- {time:88.40,text:"想你说爱我的语气 想你望着我的眼睛"},
- {time:94.22,text:"不想忘记每一刻 用思念让我们一直前进"},
- {time:104.85,text:"想象你失落的唇印 想象你失约的旅行"},
- {time:110.70,text:"想象你离开的一刻 如果我有留下你的勇气"},
- {time:118.00,text:"我能习惯远距离 爱总是身不由己"},
- {time:126.06,text:"宁愿换个方式至少还能遥远爱着你"},
- {time:133.36,text:"爱能克服远距离 多远都要在一起"},
- {time:140.09,text:"我已经不再存在你的心里 就让我独自守着回忆"},
- {time:148.70,text:"如果阳光永远都炽热"},
- {time:152.40,text:"如果彩虹不会掉颜色"},
- {time:156.00,text:"你能不能不离开呢"},
- {time:163.30,text:"我能习惯远距离 爱总是身不由己"},
- {time:170.60,text:"宁愿换个方式至少还能遥远爱着你"},
- {time:177.80,text:"爱能克服远距离 多远都要在一起"},
- {time:184.70,text:"你已经不再存在我世界里 请不要离开我的回忆"},
- {time:198.00,text:"请不要离开 我的回忆"}
-];
-lyricsData.forEach((x,i)=>{
-  const d=document.createElement("div");d.className="lyric";d.id="lyric-"+i;d.textContent=x.text;$("lyricsInner").appendChild(d)
-});
-let lyricIndex=-1;
-audio.addEventListener("timeupdate",()=>{
-  let n=-1;
-  for(let i=0;i<lyricsData.length;i++){if(audio.currentTime>=lyricsData[i].time)n=i;else break}
-  if(n!==lyricIndex){
-    if(lyricIndex>=0)$("lyric-"+lyricIndex)?.classList.remove("active");
-    lyricIndex=n;
-    if(n>=0){
-      const el=$("lyric-"+n);el.classList.add("active");
-      $("lyricsInner").style.transform=`translateY(-${Math.max(0,n*35-45)}px)`;
-    }
-  }
-});
+const screens={
+  intro:$('intro'),memory:$('memory'),meeting:$('meeting'),memories:$('memories'),music:$('music'),final:$('final')
+};
+const audio=$('bgMusic');
+const player=$('playerShell');
+const pauseBtn=$('pauseBtn');
+const portraitCards=[...document.querySelectorAll('.portrait-card')];
+const portraitCurrent=$('portraitCurrent');
+const portraitProgress=$('portraitProgress');
 
 let flowStarted=false;
-const portraitCards=[...document.querySelectorAll(".portrait-card")];
-const portraitCurrent=$("portraitCurrent");
-const portraitProgress=$("portraitProgress");
-let portraitIndex=0;
-let portraitTimer=null;
+let storyFinished=false;
+let isPaused=false;
+let lastScene='intro';
+let portraitIndex=-1;
+
+/* 场景直接跟随音乐时间，而不是使用另一套独立计时器。
+   这样暂停、恢复、浏览器切后台、音频加载延迟都不会把画面和歌曲错开。 */
+const STORY = {
+  memoryEnd: 9,
+  meetingEnd: 18,
+  portraitsStart: 18,
+  portraitsEnd: 60,
+  portraitDuration: 5.25
+};
+
+function show(name){
+  Object.values(screens).forEach(s=>s.classList.remove('active'));
+  screens[name].classList.add('active');
+  lastScene=name;
+}
+
 function showPortrait(i){
-  portraitCards.forEach((card,idx)=>card.classList.toggle("active",idx===i));
-  portraitCurrent.textContent=String(i+1).padStart(2,"0");
+  if(i<0 || i>=portraitCards.length)return;
+  if(i!==portraitIndex){
+    portraitCards.forEach((card,idx)=>card.classList.toggle('active',idx===i));
+    portraitIndex=i;
+  }
+  portraitCurrent.textContent=String(i+1).padStart(2,'0');
   portraitProgress.style.width=`${((i+1)/portraitCards.length)*100}%`;
 }
-function startPortraits(){
-  showPortrait(0);
-  clearInterval(portraitTimer);
-  portraitTimer=setInterval(()=>{
-    portraitIndex+=1;
-    if(portraitIndex>=portraitCards.length){
-      clearInterval(portraitTimer);
-      setTimeout(()=>show("music"),850);
-      return;
-    }
-    showPortrait(portraitIndex);
-  }, 3500); // 3.5秒一张
-}
 
-$("openBtn").addEventListener("click",async()=>{
-  if(flowStarted)return;
-  flowStarted=true;
+function syncStoryAt(t){
+  if(!flowStarted || storyFinished || !Number.isFinite(t))return;
 
-  try{
-    audio.currentTime=0;
-    await audio.play();
-    player.classList.add("playing");
-  }catch(e){
-    console.log("本地测试或浏览器限制，音频未自动播放");
+  if(t < STORY.memoryEnd){
+    if(lastScene!=='memory')show('memory');
+    return;
   }
 
-  show("memory");
-  setTimeout(()=>show("meeting"), 4500); // 4.5秒后切到第一次见面
-  setTimeout(()=>{show("memories");startPortraits();}, 8500); // 8.5秒后进入照片轮播
+  if(t < STORY.meetingEnd){
+    if(lastScene!=='meeting')show('meeting');
+    return;
+  }
+
+  if(t < STORY.portraitsEnd){
+    if(lastScene!=='memories')show('memories');
+    const idx=Math.min(portraitCards.length-1,Math.floor((t-STORY.portraitsStart)/STORY.portraitDuration));
+    showPortrait(idx);
+    return;
+  }
+
+  if(lastScene!=='music')show('music');
+}
+
+function syncStory(){
+  if(!flowStarted || storyFinished || audio.paused || !Number.isFinite(audio.currentTime))return;
+  syncStoryAt(audio.currentTime);
+}
+
+/* 歌词 */
+const lyricsData=[
+ {time:0,text:'作曲 : G.E.M.邓紫棋'},
+ {time:1,text:'作词 : G.E.M.邓紫棋'},
+ {time:14.25,text:'想听你听过的音乐 想看你看过的小说'},
+ {time:20.16,text:'我想收集每一刻 我想看到你眼里的世界'},
+ {time:28.44,text:'想到你到过的地方 和你曾度过的时光'},
+ {time:34.17,text:'不想错过每一刻 多希望我一直在你身旁'},
+ {time:42.80,text:'未来何从何去 你快乐我也就没关系'},
+ {time:48.41,text:'对你我最熟悉 你爱自由我却更爱你'},
+ {time:55.56,text:'我能习惯远距离 爱总是身不由己'},
+ {time:62.37,text:'宁愿换个方式至少还能遥远爱着你'},
+ {time:69.50,text:'爱能克服远距离 多远都要在一起'},
+ {time:76.57,text:'你已经不再存在我世界里 请不要离开我的回忆'},
+ {time:88.40,text:'想你说爱我的语气 想你望着我的眼睛'},
+ {time:94.22,text:'不想忘记每一刻 用思念让我们一直前进'},
+ {time:104.85,text:'想象你失落的唇印 想象你失约的旅行'},
+ {time:110.70,text:'想象你离开的一刻 如果我有留下你的勇气'},
+ {time:118.00,text:'我能习惯远距离 爱总是身不由己'},
+ {time:126.06,text:'宁愿换个方式至少还能遥远爱着你'},
+ {time:133.36,text:'爱能克服远距离 多远都要在一起'},
+ {time:140.09,text:'我已经不再存在你的心里 就让我独自守着回忆'},
+ {time:148.70,text:'如果阳光永远都炽热'},
+ {time:152.40,text:'如果彩虹不会掉颜色'},
+ {time:156.00,text:'你能不能不离开呢'},
+ {time:163.30,text:'我能习惯远距离 爱总是身不由己'},
+ {time:170.60,text:'宁愿换个方式至少还能遥远爱着你'},
+ {time:177.80,text:'爱能克服远距离 多远都要在一起'},
+ {time:184.70,text:'你已经不再存在我世界里 请不要离开我的回忆'},
+ {time:198.00,text:'请不要离开 我的回忆'}
+];
+lyricsData.forEach((x,i)=>{
+  const d=document.createElement('div');
+  d.className='lyric';
+  d.id='lyric-'+i;
+  d.textContent=x.text;
+  $('lyricsInner').appendChild(d);
 });
 
-player.addEventListener("click",()=>{
-  if(!audio.paused)return;
+let lyricIndex=-1;
+audio.addEventListener('timeupdate',()=>{
+  let n=-1;
+  for(let i=0;i<lyricsData.length;i++){
+    if(audio.currentTime>=lyricsData[i].time)n=i;else break;
+  }
+  if(n!==lyricIndex){
+    if(lyricIndex>=0)$('lyric-'+lyricIndex)?.classList.remove('active');
+    lyricIndex=n;
+    if(n>=0){
+      const el=$('lyric-'+n);
+      el.classList.add('active');
+      $('lyricsInner').style.transform=`translateY(-${Math.max(0,n*35-45)}px)`;
+    }
+  }
+  syncStory();
+});
+
+/* 开始：点击“打开”后，页面立即进入故事，音乐也在同一个用户手势里启动。 */
+let fallbackTimer=null;
+let fallbackElapsed=0;
+let fallbackLast=0;
+let usingFallback=false;
+
+function stopFallback(){
+  if(fallbackTimer!==null){
+    cancelAnimationFrame(fallbackTimer);
+    fallbackTimer=null;
+  }
+}
+
+function fallbackTick(now){
+  if(!fallbackLast)fallbackLast=now;
+  if(!isPaused){
+    fallbackElapsed+=(now-fallbackLast)/1000;
+    syncStoryAt(fallbackElapsed);
+  }
+  fallbackLast=now;
+  fallbackTimer=requestAnimationFrame(fallbackTick);
+}
+
+$('openBtn').addEventListener('click',()=>{
+  if(flowStarted)return;
+  flowStarted=true;
+  storyFinished=false;
+  isPaused=false;
+  usingFallback=false;
+  fallbackElapsed=0;
+  fallbackLast=0;
+  stopFallback();
+
+  // 先切画面，避免音频失败时整个点击看起来像“没有反应”。
+  show('memory');
+  syncStoryAt(0);
+  pauseBtn.classList.add('show');
+  pauseBtn.textContent='Ⅱ';
+  pauseBtn.title='暂停';
+
+  try{audio.currentTime=0;}catch(e){}
+
+  const playRequest=audio.play();
+  if(playRequest && typeof playRequest.then==='function'){
+    playRequest.then(()=>{
+      usingFallback=false;
+      stopFallback();
+      player.classList.add('playing');
+      document.body.classList.add('is-playing');
+      syncStory();
+    }).catch(err=>{
+      console.warn('音乐未能自动播放，请检查 music.mp3 是否与网页同目录：',err);
+      player.classList.remove('playing');
+      document.body.classList.add('is-playing');
+      usingFallback=true;
+      fallbackElapsed=0;
+      fallbackLast=performance.now();
+      fallbackTimer=requestAnimationFrame(fallbackTick);
+    });
+  }
+});
+
+pauseBtn.addEventListener('click',()=>{
+  if(!flowStarted || storyFinished)return;
+  isPaused=!isPaused;
+
+  if(isPaused){
+    audio.pause();
+    player.classList.remove('playing');
+    document.body.classList.remove('is-playing');
+    pauseBtn.textContent='▶';
+    pauseBtn.title='继续';
+  }else{
+    pauseBtn.textContent='Ⅱ';
+    pauseBtn.title='暂停';
+    if(usingFallback){
+      document.body.classList.add('is-playing');
+      player.classList.add('playing');
+      fallbackLast=performance.now();
+      if(fallbackTimer===null)fallbackTimer=requestAnimationFrame(fallbackTick);
+    }else{
+      audio.play().then(()=>{
+        player.classList.add('playing');
+        syncStory();
+      }).catch(err=>{
+        console.warn('恢复播放失败，切换到页面时钟：',err);
+        usingFallback=true;
+        fallbackLast=performance.now();
+        if(fallbackTimer===null)fallbackTimer=requestAnimationFrame(fallbackTick);
+      });
+    }
+  }
+});
+
+player.addEventListener('click',()=>{
+  if(!flowStarted || storyFinished || !audio.paused)return;
   audio.play().then(()=>{
-    player.classList.add("playing");
+    player.classList.add('playing');
+    document.body.classList.add('is-playing');
+    pauseBtn.textContent='Ⅱ';
+    pauseBtn.title='暂停';
+    syncStory();
   }).catch(()=>{});
 });
 
-/* ==========================================================
-   🎆 烟花特效引擎
-========================================================== */
-const canvas = document.getElementById('fireworks-canvas');
-const ctx = canvas.getContext('2d');
-let fireworksActive = false;
-let particles = [];
-let rockets = [];
+audio.addEventListener('play',()=>{player.classList.add('playing');document.body.classList.add('is-playing')});
+audio.addEventListener('pause',()=>{player.classList.remove('playing');document.body.classList.remove('is-playing')});
+audio.addEventListener('seeked',syncStory);
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+/* 烟花 */
+const canvas=$('fireworks-canvas');
+const ctx=canvas.getContext('2d');
+let fireworksActive=false;
+let particles=[];
+let rockets=[];
+
+function resizeCanvas(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
 }
-window.addEventListener('resize', resizeCanvas);
+window.addEventListener('resize',resizeCanvas);
 
-class Particle {
-  constructor(x, y, color) {
-    this.x = x; this.y = y;
-    this.vx = (Math.random() - 0.5) * 8;
-    this.vy = (Math.random() - 0.5) * 8;
-    this.color = color;
-    this.life = 1.0;
-    this.decay = Math.random() * 0.015 + 0.01;
-    this.gravity = 0.05;
-    this.size = Math.random() * 2 + 1;
+class Particle{
+  constructor(x,y,color){
+    this.x=x;this.y=y;
+    this.vx=(Math.random()-.5)*8;
+    this.vy=(Math.random()-.5)*8;
+    this.color=color;
+    this.life=1;
+    this.decay=Math.random()*.015+.01;
+    this.gravity=.05;
+    this.size=Math.random()*2+1;
   }
-  update() {
-    this.vx *= 0.98;
-    this.vy *= 0.98;
-    this.vy += this.gravity;
-    this.x += this.vx;
-    this.y += this.vy;
-    this.life -= this.decay;
+  update(){
+    this.vx*=.98;this.vy*=.98;this.vy+=this.gravity;
+    this.x+=this.vx;this.y+=this.vy;this.life-=this.decay;
   }
-  draw() {
-    ctx.globalAlpha = this.life;
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
+  draw(){
+    ctx.globalAlpha=this.life;ctx.fillStyle=this.color;
+    ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();
   }
 }
 
-class Rocket {
-  constructor() {
-    this.x = Math.random() * canvas.width;
-    this.y = canvas.height;
-    this.vx = (Math.random() - 0.5) * 4;
-    this.vy = Math.random() * -12 - 10;
-    this.targetY = Math.random() * canvas.height * 0.5 + 50;
-    this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+class Rocket{
+  constructor(){
+    this.x=Math.random()*canvas.width;
+    this.y=canvas.height;
+    this.vx=(Math.random()-.5)*4;
+    this.vy=Math.random()*-12-10;
+    this.targetY=Math.random()*canvas.height*.5+50;
+    this.color=`hsl(${Math.random()*360},100%,70%)`;
   }
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    if (this.y <= this.targetY) {
-      this.explode();
-      return false;
-    }
+  update(){
+    this.x+=this.vx;this.y+=this.vy;
+    if(this.y<=this.targetY){this.explode();return false}
     return true;
   }
-  explode() {
-    const numParticles = 60 + Math.floor(Math.random() * 40);
-    for (let i = 0; i < numParticles; i++) {
-      particles.push(new Particle(this.x, this.y, this.color));
-    }
+  explode(){
+    const num=60+Math.floor(Math.random()*40);
+    for(let i=0;i<num;i++)particles.push(new Particle(this.x,this.y,this.color));
   }
-  draw() {
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
-    ctx.fill();
+  draw(){
+    ctx.globalAlpha=1;ctx.fillStyle=this.color;
+    ctx.beginPath();ctx.arc(this.x,this.y,3,0,Math.PI*2);ctx.fill();
   }
 }
 
-function animateFireworks() {
-  if (!fireworksActive) return;
+function animateFireworks(){
+  if(!fireworksActive)return;
   requestAnimationFrame(animateFireworks);
-  
-  ctx.globalCompositeOperation = 'destination-out';
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.globalCompositeOperation = 'lighter';
-
-  if (Math.random() < 0.05) {
-    rockets.push(new Rocket());
-  }
-
-  rockets = rockets.filter(rocket => {
-    rocket.draw();
-    return rocket.update();
-  });
-
-  particles = particles.filter(p => {
-    p.update();
-    p.draw();
-    return p.life > 0;
-  });
+  ctx.globalCompositeOperation='destination-out';
+  ctx.fillStyle='rgba(0,0,0,.15)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.globalCompositeOperation='lighter';
+  if(Math.random()<.05)rockets.push(new Rocket());
+  rockets=rockets.filter(r=>{r.draw();return r.update()});
+  particles=particles.filter(p=>{p.update();p.draw();return p.life>0});
 }
 
-function startFireworks() {
-  canvas.style.display = 'block';
+function startFireworks(){
+  particles=[];rockets=[];
   resizeCanvas();
-  fireworksActive = true;
+  canvas.style.display='block';
+  fireworksActive=true;
   animateFireworks();
-  
-  setTimeout(() => {
-    fireworksActive = false;
-    setTimeout(() => { canvas.style.display = 'none'; }, 3000);
-  }, 12000);
+  setTimeout(()=>{
+    fireworksActive=false;
+    setTimeout(()=>{
+      canvas.style.display='none';
+      particles=[];rockets=[];
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+    },3000);
+  },12000);
 }
 
-/* ==========================================================
-   结局时间线（音乐结束后）
-========================================================== */
-audio.addEventListener("ended",()=>{
-  clearInterval(portraitTimer);
-  player.classList.remove("playing");
-  show("final");
-  
-  // 1. 依次显示文字
-  setTimeout(()=>$("f1").classList.add("show"), 500);
-  setTimeout(()=>$("f2").classList.add("show"), 2000);
-  setTimeout(()=>$("f3").classList.add("show"), 3500);
-  setTimeout(()=>$("f4").classList.add("show"), 5000); // 生日快乐
-  setTimeout(()=>$("letterHint").classList.add("show-hint"), 6500); // 还有一封信
+/* 音乐结束后的最终段落 */
+audio.addEventListener('ended',async()=>{
+  stopFallback();
+  storyFinished=true;
+  player.classList.remove('playing');
+  document.body.classList.remove('is-playing');
+  pauseBtn.classList.remove('show');
+  show('final');
 
-  // 2. 触发烟花 (延迟 7 秒，让文字先站定)
-  setTimeout(() => {
-    startFireworks();
-  }, 7000);
-
-  // 3. 生日蛋糕缓缓放大定格 (延迟 10 秒)
-  setTimeout(() => {
-    $("cakeWrapper").classList.add("show");
-  }, 10000);
+  await delay(500);
+  $('f1').classList.add('show');
+  await delay(1500);
+  $('f2').classList.add('show');
+  await delay(1500);
+  $('f3').classList.add('show');
+  await delay(1500);
+  $('f4').classList.add('show');
+  await delay(1500);
+  $('letterHint').classList.add('show-hint');
+  await delay(1000);
+  startFireworks();
+  await delay(3000);
+  $('cakeWrapper').classList.add('show');
 });
 
+function delay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 </script>
 </body>
 </html>
