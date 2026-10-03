@@ -9,7 +9,7 @@
         
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background: radial-gradient(circle at 20% 30%, #fff5f6 0%, #f0f2f5 100%);
             font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
             color: #333;
             display: flex;
@@ -19,6 +19,21 @@
             overflow-x: hidden;
         }
 
+        /* 背景漂浮的粉色光斑 */
+        .bg-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 107, 129, 0.15);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            animation: breathe 6s infinite alternate;
+        }
+        .bg-glow:nth-child(1) { top: -100px; left: -100px; }
+        .bg-glow:nth-child(2) { bottom: -100px; right: -100px; background: rgba(161, 140, 209, 0.15); animation-delay: 2s; }
+        @keyframes breathe { 0% { transform: scale(1); } 100% { transform: scale(1.3); } }
+
         /* ========== 整体主容器 ========== */
         .main-container {
             display: flex;
@@ -27,6 +42,7 @@
             gap: 50px;
             max-width: 900px;
             width: 100%;
+            z-index: 1;
         }
 
         /* ========== 左边：悬挂照片墙 ========== */
@@ -35,56 +51,58 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
-            padding: 10px 30px;
-            /* 悬挂的线 */
-            border-left: 2px solid #ccc;
+            gap: 25px;
+            padding: 20px 30px;
         }
-        /* 线上的小夹子效果 */
+        /* 有质感的悬挂麻绳 */
         .left-gallery::before {
             content: '';
             position: absolute;
-            top: 0; bottom: 0; left: -8px;
-            width: 14px;
-            background: repeating-linear-gradient(to bottom, transparent, transparent 20px, #ccc 20px, #ccc 22px);
-            opacity: 0.3;
+            top: 0; bottom: 0; left: 50%;
+            width: 4px;
+            background: repeating-linear-gradient(45deg, #d2b48c, #d2b48c 4px, #c19a6b 4px, #c19a6b 8px);
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transform: translateX(-50%);
+            z-index: -1;
         }
 
         .photo-wrap {
             background: white;
-            padding: 6px 6px 18px 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 8px 8px 24px 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
             border-radius: 2px;
-            transition: transform 0.3s ease;
             position: relative;
-            /* 模拟挂在墙上的轻微倾斜 */
+            transition: all 0.4s ease;
+            animation: swing 4s ease-in-out infinite alternate;
         }
-        .photo-wrap:hover {
-            transform: scale(1.05) rotate(0deg) !important;
-            z-index: 10;
-        }
-        /* 挂线夹子（上方小孔） */
+        /* 模拟金属夹子 */
         .photo-wrap::after {
             content: '';
             position: absolute;
-            top: -10px;
+            top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            width: 10px;
-            height: 10px;
-            background: #888;
-            border-radius: 50%;
-            box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+            width: 14px;
+            height: 16px;
+            background: linear-gradient(to bottom, #ccc, #888);
+            border-radius: 4px 4px 0 0;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.5), 0 2px 4px rgba(0,0,0,0.2);
         }
-        .photo-wrap:nth-child(1) { transform: rotate(-5deg); margin-left: -20px; }
-        .photo-wrap:nth-child(2) { transform: rotate(4deg); margin-left: 20px; }
-        .photo-wrap:nth-child(3) { transform: rotate(-3deg); margin-left: -10px; }
+        /* 错落的排布 */
+        .photo-wrap:nth-child(1) { transform: rotate(-6deg) translateX(-15px); animation-delay: 0s; }
+        .photo-wrap:nth-child(2) { transform: rotate(5deg) translateX(15px); animation-delay: 0.5s; }
+        .photo-wrap:nth-child(3) { transform: rotate(-3deg) translateX(-5px); animation-delay: 1s; }
 
         .photo-wrap img {
-            width: 90px;
-            height: 110px;
+            width: 85px;
+            height: 105px;
             object-fit: cover;
             border-radius: 1px;
+        }
+
+        @keyframes swing {
+            0% { rotate: -2deg; }
+            100% { rotate: 2deg; }
         }
 
         /* ========== 右边：唱片机与歌词 ========== */
@@ -92,84 +110,92 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            padding: 30px 25px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            padding: 35px 30px;
             width: 100%;
             max-width: 380px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(255,255,255,0.5);
         }
 
-        /* 黑胶唱片机（放大版） */
+        /* 黑胶唱片机（带光晕） */
         .record-player {
             position: relative;
-            width: 170px;
-            height: 170px;
+            width: 180px;
+            height: 180px;
             margin-bottom: 25px;
         }
         .vinyl {
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, #333 30%, #111 70%, #000 100%);
+            background: radial-gradient(circle, #3a3a3a 30%, #1a1a1a 70%, #000 100%);
             border-radius: 50%;
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 40px rgba(255,107,129,0.3);
             animation: spin 4s linear infinite;
             animation-play-state: paused;
+            transition: box-shadow 0.5s;
         }
         .vinyl::before {
             content: '';
             position: absolute;
-            width: 80%;
-            height: 80%;
+            width: 85%;
+            height: 85%;
             border-radius: 50%;
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
         }
-        /* 黑胶中间贴纸 */
+        
         .vinyl-label {
-            width: 40%;
-            height: 40%;
+            width: 42%;
+            height: 42%;
             border-radius: 50%;
-            background-image: url('photo.jpg'); /* 这里会自动用你的第一张照片 */
+            background-image: url('photo.jpg');
             background-size: cover;
             background-position: center;
             z-index: 2;
             border: 3px solid #ff6b81;
-            box-shadow: 0 0 10px rgba(255,107,129,0.5);
+            box-shadow: 0 0 15px rgba(255,107,129,0.6);
         }
-        /* 唱臂（放大版） */
+        
+        /* 唱臂 */
         .tonearm {
             position: absolute;
-            top: -10px;
-            right: 5px;
-            width: 60px;
+            top: -12px;
+            right: 8px;
+            width: 65px;
             height: 6px;
-            background: #999;
+            background: linear-gradient(to bottom, #eee, #999);
             border-radius: 5px;
             transform-origin: right center;
             transform: rotate(-35deg);
-            transition: transform 0.5s ease;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 3;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
         .tonearm::after {
             content: '';
             position: absolute;
             left: -8px;
             top: -3px;
-            width: 14px;
+            width: 16px;
             height: 12px;
-            background: #555;
+            background: #444;
             border-radius: 50%;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
         }
         
         /* 播放状态 */
-        .playing .vinyl { animation-play-state: running; }
+        .playing .vinyl { 
+            animation-play-state: running; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 60px rgba(255,107,129,0.6);
+        }
         .playing .tonearm { transform: rotate(5deg); }
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -177,77 +203,106 @@
         /* 歌词区 */
         .lyrics-container {
             width: 100%;
-            height: 100px;
+            height: 110px;
             overflow: hidden;
             position: relative;
             mask-image: linear-gradient(transparent, black 20%, black 80%, transparent);
             -webkit-mask-image: linear-gradient(transparent, black 20%, black 80%, transparent);
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         .lyrics-inner {
-            transition: transform 0.4s ease;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .lyric-line {
             font-size: 14px;
-            color: #999;
-            padding: 8px 0;
+            color: #aaa;
+            padding: 10px 0;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.4s ease;
+            transform-origin: center;
         }
         .lyric-line.active {
             color: #ff6b81;
             font-weight: bold;
-            font-size: 16px;
-            transform: scale(1.05);
+            font-size: 17px;
+            transform: scale(1.1);
+            text-shadow: 0 0 10px rgba(255,107,129,0.5);
         }
 
-        /* 播放按钮 */
+        /* 播放按钮（脉冲光效） */
         .play-btn {
             background: linear-gradient(135deg, #ff6b81, #ff9a9e);
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 15px 50px;
+            padding: 16px 50px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 107, 129, 0.4);
+            box-shadow: 0 8px 25px rgba(255, 107, 129, 0.5);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 10px;
+            position: relative;
+            overflow: hidden;
         }
+        .play-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.2);
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 50%;
+            transition: transform 0.5s;
+        }
+        .play-btn:hover::before { transform: translate(-50%, -50%) scale(2); opacity: 0; }
         .play-btn:active { transform: scale(0.95); }
         .play-btn.playing {
             background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            box-shadow: 0 8px 25px rgba(161, 140, 209, 0.5);
+        }
+
+        /* 心跳脉冲动画 */
+        .play-btn:not(.playing) {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 129, 0.6); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 107, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 129, 0); }
         }
 
         #bg-music { display: none; }
 
-        /* ========== 手机屏幕适配（上下排列） ========== */
+        /* ========== 手机屏幕适配 ========== */
         @media (max-width: 650px) {
             .main-container {
                 flex-direction: column;
-                gap: 30px;
+                gap: 20px;
             }
             .left-gallery {
                 flex-direction: row;
-                border-left: none;
-                border-bottom: 2px solid #ccc;
-                padding: 10px 0 20px 0;
-                width: 100%;
-                justify-content: center;
+                padding: 10px 0;
+                gap: 15px;
             }
             .left-gallery::before { display: none; }
-            .photo-wrap:nth-child(1) { margin-left: 0; }
-            .photo-wrap:nth-child(2) { margin-left: 0; }
-            .photo-wrap:nth-child(3) { margin-left: 0; }
-            .photo-wrap img { width: 75px; height: 95px; }
-            .right-player { padding: 25px 15px; }
+            .photo-wrap { padding: 5px 5px 15px 5px; animation: none; }
+            .photo-wrap:nth-child(1) { transform: rotate(-4deg) translateX(0); }
+            .photo-wrap:nth-child(2) { transform: rotate(3deg) translateX(0); }
+            .photo-wrap:nth-child(3) { transform: rotate(-2deg) translateX(0); }
+            .photo-wrap img { width: 70px; height: 85px; }
+            .right-player { padding: 25px 20px; }
+            .record-player { width: 150px; height: 150px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- 背景氛围光斑 -->
+    <div class="bg-glow"></div>
+    <div class="bg-glow"></div>
 
     <div class="main-container">
         <!-- 左边：照片墙 -->
