@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#171514">
+<meta name="theme-color" content="#f7f3f1">
 <title>多远都要在一起</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -12,6 +12,8 @@
   --soft:#817873;
   --rose:#c98f8d;
   --paper:#f7f3ef;
+  --paper2:#eee7e1;
+  --line:rgba(39,35,33,.12);
 }
 html,body{width:100%;min-height:100%;background:var(--paper);color:var(--ink)}
 body{
@@ -23,7 +25,7 @@ button{font:inherit}
 .screen{
   position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
   opacity:0;visibility:hidden;pointer-events:none;
-  transition:opacity 1.5s ease,visibility 1.5s ease;
+  transition:opacity 1s ease,visibility 1s ease;
   overflow:hidden;
 }
 .screen.active{opacity:1;visibility:visible;pointer-events:auto}
@@ -48,89 +50,68 @@ button{font:inherit}
 }
 .open-btn:hover:after{width:54px}
 
-/* 2. 太原回忆（重点修改：上下排版，彻底分离） */
-#memory{background:linear-gradient(145deg,#f8f4f0,#eee8e3)}
-.memory-content{
-  width: 100%;
-  height: 100%;
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px 80px; /* 底部留大空间给文字 */
-}
+/* 2. 太原回忆 */
+.scene-wrap{width:min(920px,92vw);height:min(760px,88vh);position:relative}
 .scene-date{
-  position:absolute;top:8%;left:8%;font-family:Georgia,serif;font-size:11px;
+  position:absolute;top:0;left:0;font-family:Georgia,serif;font-size:11px;
   letter-spacing:4px;color:var(--soft);opacity:0;transform:translateY(8px);
-  transition:all 1.5s ease .4s;
+  transition:all 1s ease .4s;
 }
 .memory.active .scene-date{opacity:1;transform:none}
+.memory-content{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+}
 .memory-photo{
-  width:min(220px, 55vw); /* 照片尺寸微调，给文字留空间 */
-  aspect-ratio:3/4;object-fit:cover;
+  width:min(270px,62vw);aspect-ratio:3/4;object-fit:cover;
   box-shadow:0 22px 50px rgba(40,30,25,.16);
   opacity:0;transform:translateY(25px) rotate(-2deg) scale(.97);
-  transition:opacity 2s ease,transform 2s cubic-bezier(.2,.8,.2,1);
+  transition:opacity 1.3s ease .5s,transform 1.3s cubic-bezier(.2,.8,.2,1) .5s;
 }
 .memory.active .memory-photo{opacity:1;transform:translateY(0) rotate(-2deg) scale(1)}
 .memory-copy{
-  text-align:center;
-  margin-top: 25px; /* 照片和文字拉开距离 */
-  opacity:0;transform:translateY(15px);transition:all 2s ease .8s;
+  position:absolute;bottom:5%;left:0;right:0;text-align:center;
+  opacity:0;transform:translateY(15px);transition:all 1s ease 1.2s;
 }
 .memory.active .memory-copy{opacity:1;transform:none}
 .memory-copy .eyebrow{font-size:11px;letter-spacing:4px;color:var(--soft);margin-bottom:16px}
-.memory-copy h2{font-size:22px;font-weight:400;letter-spacing:3px}
-.memory-copy p{margin-top:14px;font-size:13px;color:#756d68;line-height:2;letter-spacing:1px}
+.memory-copy h2{font-size:24px;font-weight:400;letter-spacing:3px}
+.memory-copy p{margin-top:18px;font-size:13px;color:#756d68;line-height:2;letter-spacing:1px}
 
-/* 3. 三张照片的记忆（重点修改：改为上下结构，文字不再绝对定位盖住照片） */
-#memories{background:linear-gradient(145deg,#f8f4f0,#eee8e3)}
-.memories-content {
-  width: 100%;
-  height: 100%;
-  display:flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 20px 100px;
-}
-.memory-stack{position:relative;width:min(520px,78vw);height:min(380px,55vh)} /* 高度缩小，给文字留位置 */
-.mem-card{
-  position:absolute;width:180px;aspect-ratio:3/4;background:#fff;padding:7px 7px 27px;
-  box-shadow:0 18px 40px rgba(45,35,30,.12);opacity:0;
-  transition:opacity 2s ease,transform 2s cubic-bezier(.2,.8,.2,1);
-}
-.mem-card img{width:100%;height:100%;object-fit:cover}
-.mem-card.one{left:5%;top:12%;transform:rotate(-7deg) translateY(35px)}
-.mem-card.two{right:3%;top:3%;transform:rotate(6deg) translateY(35px)}
-.mem-card.three{left:30%;bottom:0;transform:rotate(-2deg) translateY(35px)}
+/* 3. 第一次见面 */
+.meeting{background:#f7f3ef;text-align:center}
+.meeting-copy{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transform:translateY(14px);transition:all 1.1s ease .35s}
+.meeting.active .meeting-copy{opacity:1;transform:none}
+.meeting-copy .eyebrow,.portrait-head .eyebrow{font-size:10px;letter-spacing:4px;color:var(--soft);margin-bottom:18px}
+.meeting-copy h2{font-size:24px;font-weight:400;letter-spacing:3px}
+.meeting-copy p{margin-top:18px;font-size:13px;color:#756d68;line-height:2;letter-spacing:1px}
 
-.memories.active .mem-card.one{opacity:1;transform:rotate(-7deg) translateY(0)}
-.memories.active .mem-card.two{opacity:1;transform:rotate(6deg) translateY(0);transition-delay:2s}
-.memories.active .mem-card.three{opacity:1;transform:rotate(-2deg) translateY(0);transition-delay:4s}
+/* 4. 照片轮播 */
+#memories{background:linear-gradient(145deg,#f8f4f0,#ece6e0)}
+.portrait-stage{width:min(680px,90vw);height:min(760px,90vh);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.portrait-head{text-align:center;position:absolute;top:6%;opacity:0;transform:translateY(-10px);transition:all 1s ease .2s}
+.memories.active .portrait-head{opacity:1;transform:none}
+.portrait-note{font-size:14px;color:#6e6661;letter-spacing:2px;line-height:1.9}
+.portrait-counter{position:absolute;top:7%;right:0;font-family:Georgia,serif;font-size:12px;letter-spacing:3px;color:#8b817b;opacity:.8}
+.portrait-counter i{font-style:normal;margin:0 5px;opacity:.5}
+.portrait-frame{position:relative;width:min(330px,68vw);height:min(500px,62vh);display:flex;align-items:center;justify-content:center;margin-top:34px}
+.portrait-card{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(18px) scale(.985) rotate(-1deg);transition:opacity 1.1s ease,transform 1.15s cubic-bezier(.2,.8,.2,1)}
+.portrait-card.active{opacity:1;transform:translateY(0) scale(1) rotate(-1deg)}
+.portrait-card img{max-width:100%;max-height:100%;width:auto;height:auto;display:block;object-fit:contain;box-shadow:0 24px 55px rgba(40,30,25,.15);background:#fff;padding:7px}
+.portrait-progress{position:absolute;bottom:5%;width:min(300px,60vw);height:1px;background:rgba(39,35,33,.12);overflow:hidden}
+.portrait-progress span{display:block;width:12.5%;height:100%;background:var(--rose);transform-origin:left center;transition:width .45s ease}
 
-/* 文字单独占位，不再绝对定位 */
-.memory-note{
-  margin-top: 40px; /* 和照片区域拉开距离 */
-  text-align:center;color:#6e6661;font-size:14px;line-height:2.1;
-  letter-spacing:1px;opacity:0;transition:opacity 1.5s ease;
-  width: 100%;
-}
-.memory-note.show{opacity:1;transition-delay:0s}
-
-/* 4. 黑胶唱片 */
+/* 5. 黑胶唱片 */
 .music-scene{background:radial-gradient(circle at 50% 45%,#f5efec 0,#e9e1dc 42%,#ddd3cd 100%)}
 .player-shell{display:flex;flex-direction:column;align-items:center;width:min(430px,88vw)}
-.record-player{width:min(280px,65vw);aspect-ratio:1;position:relative}
+.record-player{width:min(310px,68vw);aspect-ratio:1;position:relative}
 .vinyl{
   width:100%;height:100%;border-radius:50%;
   background:repeating-radial-gradient(circle,#171717 0,#171717 2px,#202020 3px,#111 4px);
   box-shadow:0 25px 60px rgba(20,15,12,.32),0 0 0 1px rgba(255,255,255,.18);
   display:flex;align-items:center;justify-content:center;
   animation:spin 4s linear infinite;animation-play-state:paused;
-  transition:box-shadow 1s ease;
 }
-.music-scene.playing .vinyl{animation-play-state:running;box-shadow:0 25px 60px rgba(20,15,12,.32),0 0 60px rgba(201,143,141,.4)}
+.playing .vinyl{animation-play-state:running}
 .vinyl:after{content:"";position:absolute;width:62%;height:62%;border-radius:50%;border:1px solid rgba(255,255,255,.08)}
 .label{
   width:38%;height:38%;border-radius:50%;background:url("photo.jpg") center/cover;
@@ -139,18 +120,16 @@ button{font:inherit}
 .tonearm{
   position:absolute;right:1%;top:-3%;width:40%;height:7px;border-radius:5px;
   background:linear-gradient(#f2f0ed,#999);transform-origin:right center;
-  transform:rotate(-34deg);transition:transform 1.5s cubic-bezier(.4,0,.2,1);z-index:4;
+  transform:rotate(-34deg);transition:transform 1s cubic-bezier(.4,0,.2,1);z-index:4;
   box-shadow:0 4px 8px rgba(0,0,0,.18)
 }
 .tonearm:after{content:"";position:absolute;left:-8px;top:-3px;width:17px;height:13px;border-radius:50%;background:#444}
-.music-scene.playing .tonearm{transform:rotate(6deg)}
-.music-caption{text-align:center;margin-top:30px}
+.playing .tonearm{transform:rotate(6deg)}
+.music-caption{text-align:center;margin-top:38px}
 .music-caption .small{font-size:10px;letter-spacing:4px;color:#887d77}
 .music-caption h2{font-size:19px;font-weight:400;letter-spacing:3px;margin-top:12px}
-
-/* 歌词 */
 .lyrics{
-  width:100%;height:95px;margin-top:20px;overflow:hidden;text-align:center;
+  width:100%;height:95px;margin-top:28px;overflow:hidden;text-align:center;
   mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent);
   -webkit-mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent);
 }
@@ -158,87 +137,155 @@ button{font:inherit}
 .lyric{font-size:13px;color:#aaa;padding:9px 0;transition:.45s}
 .lyric.active{font-size:16px;color:#b87876;font-weight:500;text-shadow:0 0 15px rgba(184,120,118,.25)}
 
-/* 5. 结局 */
-.final-scene{background:#1b1918;color:#eee9e5;flex-direction:column;text-align:center;padding:0 30px}
+/* 6. 结局 & 烟花 & 蛋糕 */
+.final-scene{background:#1b1918;color:#eee9e5;flex-direction:column;text-align:center;padding:0 30px;}
 .final-kicker{font-size:10px;letter-spacing:5px;opacity:.4;margin-bottom:30px}
-.final-line{font-size:20px;line-height:2.3;letter-spacing:3px;font-weight:300;opacity:0;transform:translateY(12px);transition:all 1.5s ease}
+.final-line{font-size:20px;line-height:2.3;letter-spacing:3px;font-weight:300;opacity:0;transform:translateY(12px);transition:all 1.2s ease}
 .final-line.show{opacity:.92;transform:none}
 .final-line.second{font-size:15px;letter-spacing:2px;margin-top:18px;color:#bdb5b0}
-.final-line.third{font-size:22px;margin-top:26px;color:#eee9e5}
+.final-line.third{font-size:22px;margin-top:28px;color:#eee9e5;letter-spacing:4px}
+.final-line.fourth{font-size:26px;margin-top:28px;color:#ff6b81;letter-spacing:6px;font-weight:400}
 .letter-hint{
-  margin-top:65px;font-size:11px;letter-spacing:3px;color:#aaa19c;
-  opacity:0;transition:opacity 1.5s ease 2s
+  margin-top:55px;font-size:11px;letter-spacing:3px;color:#aaa19c;
+  opacity:0;transform:translateY(8px);transition:opacity 1s ease,transform 1s ease;
 }
-.final-scene.active .letter-hint{opacity:.65}
+.final-scene.active .letter-hint.show-hint{opacity:.65;transform:none}
+
+#fireworks-canvas {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 30; display: none;
+}
+
+.cake-wrapper {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.3);
+  opacity: 0;
+  transition: all 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 40;
+  pointer-events: none;
+}
+.cake-wrapper.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.cake-svg {
+  width: 220px; height: 220px;
+  filter: drop-shadow(0 15px 35px rgba(255, 107, 129, 0.4));
+}
+
+/* 7. 暂停按钮 */
+.pause-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  opacity: 0;
+  visibility: hidden;
+}
+.pause-btn.show {
+  opacity: 1;
+  visibility: visible;
+}
+.pause-btn:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
 
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* 手机适配（重点修改区域） */
 @media(max-width:650px){
-  .memory-photo{width:50vw; margin-top: 20px;}
-  .memory-copy h2 {font-size: 18px;}
-  .memory-copy p {font-size: 12px;}
-  
-  .memory-stack{width:86vw; height: 48vh;} /* 手机端高度进一步压缩 */
-  .mem-card{width:38vw;}
-  .mem-card.one{left:1%; top: 5%;}
-  .mem-card.two{right:0; top: -5%;}
-  .mem-card.three{left:29%; bottom: 0;}
-  
-  .memory-note {
-    margin-top: 20px;
-    font-size: 12px;
-  }
-  
-  .record-player{width:60vw;}
-  .music-caption {margin-top: 20px;}
-  .lyrics {margin-top: 15px;}
+  .scene-wrap{height:78vh;width:88vw}
+  .scene-date{left:2px}
+  .memory-photo{width:58vw}
+  .memory-copy{bottom:7%}
+  .memory-copy h2{font-size:21px}
+  .meeting-copy h2{font-size:21px}
+  .portrait-stage{width:90vw;height:78vh}
+  .portrait-head{top:4%}
+  .portrait-counter{right:4%;top:5%}
+  .portrait-frame{width:74vw;height:54vh;margin-top:24px}
+  .portrait-note{font-size:12px}
+  .portrait-progress{bottom:4%;width:58vw}
+  .record-player{width:68vw}
+  .final-line.fourth { font-size: 22px; }
+  .cake-svg { width: 180px; height: 180px; }
+  .pause-btn { width: 40px; height: 40px; font-size: 18px; top: 15px; right: 15px; }
 }
 </style>
 </head>
 <body>
 <div class="grain"></div>
 
-<!-- 1. 封面 -->
+<button class="pause-btn" id="pauseBtn" title="暂停">⏸️</button>
+
 <section id="intro" class="screen active">
-  <div class="intro-small">A LITTLE SOMETHING FOR YOU</div>
+  <div class="intro-small">A LITTLE BIRTHDAY GIFT FOR YOU</div>
   <div class="intro-title">你已经找到它了。<br>那就慢慢打开吧。</div>
   <button class="open-btn" id="openBtn">打开</button>
 </section>
 
-<!-- 2. 太原回忆 -->
 <section id="memory" class="screen memory">
-  <div class="scene-date">2024 · 10 · TAIYUAN</div>
-  <div class="memory-content">
-    <img class="memory-photo" src="photo.jpg" alt="我们的照片">
-    <div class="memory-copy">
+  <div class="scene-wrap">
+    <div class="scene-date">2024 · 10 · TAIYUAN</div>
+    <div class="memory-content">
+      <img class="memory-photo" src="photo.jpg" alt="那天我们在太原相见">
+      <div class="memory-copy">
+        <div class="eyebrow">那一天我们在太原第一次相见</div>
+        <h2>那时候，我舍不得离开，我会记住一辈子。</h2>
+        <p>后来想想，我们再多见面会不会更好。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="meeting" class="screen meeting">
+  <div class="scene-wrap">
+    <div class="meeting-copy">
       <div class="eyebrow">第一次见面</div>
-      <h2>我们明明只见过一次</h2>
+      <h2>第一次见面，第一次牵手</h2>
       <p>第一次看电影 · 第一次吃饭 · 第一次牵手</p>
-      <p>我其实挺遗憾，当时没有和你好好散散步。</p>
+      <p>我其实挺遗憾，当时没有和你好好牵着手漫步在太原的夜晚。</p>
     </div>
   </div>
 </section>
 
-<!-- 3. 照片回忆 -->
 <section id="memories" class="screen memories">
-  <div class="memories-content">
-    <div class="memory-stack">
-      <div class="mem-card one"><img src="photo.jpg" alt=""></div>
-      <div class="mem-card two"><img src="photo1.jpg" alt=""></div>
-      <div class="mem-card three"><img src="photo2.jpg" alt=""></div>
+  <div class="portrait-stage">
+    <div class="portrait-head">
+      <div class="eyebrow">LATER, IN DIFFERENT MOMENTS</div>
+      <div class="portrait-note">后来，你有了好多好多不一样的样子。</div>
     </div>
-    <div class="memory-note" id="memNote">
-      这是后来。<br>
-      我们分开过。<br>
-      也重新走回来过。<br>
+    <div class="portrait-counter"><span id="portraitCurrent">01</span><i>/</i>08</div>
+    <div class="portrait-frame">
+      <div class="portrait-card active"><img src="photo1.jpg" alt="" loading="eager"></div>
+      <div class="portrait-card"><img src="photo2.jpg" alt="" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo3.jpg" alt="" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo4.jpg" alt="" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo5.jpg" alt="" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo6.jpg" alt="" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo7.jpg" alt="" loading="lazy"></div>
+      <div class="portrait-card"><img src="photo8.jpg" alt="" loading="lazy"></div>
     </div>
+    <div class="portrait-progress"><span id="portraitProgress"></span></div>
   </div>
 </section>
 
-<!-- 4. 黑胶唱片 -->
-<section id="music" class="screen music-scene" id="musicScene">
-  <div class="player-shell">
+<section id="music" class="screen music-scene">
+  <div class="player-shell" id="playerShell">
     <div class="record-player">
       <div class="tonearm"></div>
       <div class="vinyl"><div class="label"></div></div>
@@ -251,22 +298,80 @@ button{font:inherit}
   </div>
 </section>
 
-<!-- 5. 结局 -->
 <section id="final" class="screen final-scene">
   <div class="final-kicker">THE END OF THIS SONG</div>
   <div class="final-line" id="f1">这一路，</div>
   <div class="final-line second" id="f2">我们走得并不容易。<br>跌跌撞撞，分开过，也重新走回来过。</div>
   <div class="final-line third" id="f3">我们要走很远很远。</div>
-  <div class="letter-hint">还有一封信，回去看看吧。</div>
+  <div class="final-line fourth" id="f4">生日快乐。</div>
+  <div class="letter-hint" id="letterHint">还有一封信，回去看看吧。</div>
 </section>
 
-<audio id="bgMusic" src="music.mp3" preload="auto"></audio>
+<canvas id="fireworks-canvas"></canvas>
+
+<div class="cake-wrapper" id="cakeWrapper">
+  <svg class="cake-svg" viewBox="0 0 200 200">
+    <ellipse cx="100" cy="165" rx="75" ry="18" fill="#f7e2d1"/>
+    <rect x="25" y="130" width="150" height="35" fill="#e8c7b6" rx="6"/>
+    <ellipse cx="100" cy="130" rx="75" ry="18" fill="#f7e2d1"/>
+    <rect x="45" y="95" width="110" height="35" fill="#f2d1c1" rx="4"/>
+    <ellipse cx="100" cy="95" rx="55" ry="14" fill="#fff0e6"/>
+    <rect x="94" y="45" width="12" height="50" fill="#fff" rx="3"/>
+    <polygon points="100,28 94,45 106,45" fill="#ff6b6b"/>
+    <ellipse cx="100" cy="22" rx="5" ry="10" fill="#ffd700" opacity="0.9">
+      <animate attributeName="ry" values="10;12;10" dur="0.8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="0.5s" repeatCount="indefinite"/>
+    </ellipse>
+    <circle cx="45" cy="130" r="6" fill="#ff9a9e"/>
+    <circle cx="155" cy="130" r="6" fill="#ff9a9e"/>
+    <circle cx="60" cy="95" r="5" fill="#a18cd1"/>
+    <circle cx="140" cy="95" r="5" fill="#a18cd1"/>
+    <circle cx="100" cy="130" r="6" fill="#ff9a9e"/>
+  </svg>
+</div>
+
+<audio id="bgMusic" src="music.wav" preload="auto"></audio>
 
 <script>
 const $=id=>document.getElementById(id);
-const screens={intro:$("intro"),memory:$("memory"),memories:$("memories"),music:$("music"),final:$("final")};
-const audio=$("bgMusic");
-const musicScene=$("music");
+const screens={intro:$("intro"),memory:$("memory"),meeting:$("meeting"),memories:$("memories"),music:$("music"),final:$("final")};
+const audio=$("bgMusic"), player=$("playerShell");
+const pauseBtn=$("pauseBtn");
+
+// 全局状态
+let isPaused = false;
+let flowStarted = false;
+
+// 显示某个场景
+function show(name){
+  Object.values(screens).forEach(s=>s.classList.remove("active"));
+  screens[name].classList.add("active");
+}
+
+// 自定义的带暂停功能的 sleep
+function sleep(ms) {
+    return new Promise(resolve => {
+        let start = Date.now();
+        let remaining = ms;
+        const check = () => {
+            if (isPaused) {
+                // 如果暂停，计算这段时间消耗了多少，从剩余时间里扣除，然后继续轮询
+                let elapsed = Date.now() - start;
+                remaining -= elapsed;
+                start = Date.now();
+                setTimeout(check, 100);
+            } else {
+                let elapsed = Date.now() - start;
+                if (elapsed >= remaining) {
+                    resolve();
+                } else {
+                    setTimeout(check, 100);
+                }
+            }
+        };
+        check();
+    });
+}
 
 // 歌词数据
 const lyricsData=[
@@ -299,8 +404,6 @@ const lyricsData=[
  {time:184.70,text:"你已经不再存在我世界里 请不要离开我的回忆"},
  {time:198.00,text:"请不要离开 我的回忆"}
 ];
-
-// 初始化歌词
 lyricsData.forEach((x,i)=>{
   const d=document.createElement("div");d.className="lyric";d.id="lyric-"+i;d.textContent=x.text;$("lyricsInner").appendChild(d)
 });
@@ -318,71 +421,225 @@ audio.addEventListener("timeupdate",()=>{
   }
 });
 
-// 切换场景
-function show(name){
-  Object.values(screens).forEach(s=>s.classList.remove("active"));
-  screens[name].classList.add("active");
+// 照片轮播
+const portraitCards=[...document.querySelectorAll(".portrait-card")];
+const portraitCurrent=$("portraitCurrent");
+const portraitProgress=$("portraitProgress");
+let portraitIndex=0;
+
+function showPortrait(i){
+  portraitCards.forEach((card,idx)=>card.classList.toggle("active",idx===i));
+  portraitCurrent.textContent=String(i+1).padStart(2,"0");
+  portraitProgress.style.width=`${((i+1)/portraitCards.length)*100}%`;
 }
 
-// 音乐解锁（关键：iOS必须由用户手势解锁）
-$("openBtn").addEventListener("click",async()=>{
-  // 1. 解锁音频上下文：播放后立刻暂停
-  try {
-    await audio.play();
-    audio.pause();
-    audio.currentTime = 0;
-  } catch(e) {
-    console.log("Audio unlock failed", e);
+// 核心故事线（已完全改为 async/await，支持暂停）
+async function runStory() {
+  // 1. 太原回忆停留 4.5 秒
+  await sleep(4500);
+
+  // 2. 进入第一次见面
+  show("meeting");
+  await sleep(4000);
+
+  // 3. 进入照片轮播
+  show("memories");
+  for (let i = 0; i < portraitCards.length; i++) {
+    showPortrait(i);
+    await sleep(3500); // 每张照片停留 3.5 秒
   }
 
-  // 2. 进入回忆
-  show("memory");
+  // 4. 照片看完，进入黑胶唱片
+  show("music");
+}
+
+// 开始按钮
+$("openBtn").addEventListener("click", async () => {
+  if (flowStarted) return;
+  flowStarted = true;
+
+  try {
+    audio.currentTime = 0;
+    await audio.play();
+    player.classList.add("playing");
+  } catch (e) {
+    console.log("本地测试或浏览器限制，音频未自动播放");
+  }
+
+  // 显示暂停按钮
+  pauseBtn.classList.add("show");
+
+  // 启动故事线
+  runStory();
 });
 
-// 整个故事的时间线（全自动播放，不再需要点击）
-async function runStory() {
-  // 等待页面进入太原回忆，展示约 6 秒
-  await new Promise(r => setTimeout(r, 6000));
+// 暂停/继续按钮逻辑
+pauseBtn.addEventListener("click", () => {
+  isPaused = !isPaused;
+  if (isPaused) {
+    audio.pause();
+    pauseBtn.innerHTML = "▶️";
+    pauseBtn.title = "继续";
+    document.querySelector('.music-scene').classList.add('paused'); // 可选：暂停黑胶旋转
+  } else {
+    audio.play();
+    pauseBtn.innerHTML = "⏸️";
+    pauseBtn.title = "暂停";
+    document.querySelector('.music-scene').classList.remove('paused');
+  }
+});
 
-  // 切换到三张照片
-  show("memories");
+// 点击黑胶唱片可以手动播放（防浏览器拦截）
+player.addEventListener("click", () => {
+  if (!audio.paused || isPaused) return;
+  audio.play().then(() => {
+    player.classList.add("playing");
+  }).catch(()=>{});
+});
 
-  // 依次展示三张照片（CSS transition delay 已经做好了照片的错落出现）
-  // 等待照片全部出现并多停留 2 秒
-  await new Promise(r => setTimeout(r, 8000));
+/* ==========================================================
+   🎆 烟花特效引擎
+========================================================== */
+const canvas = document.getElementById('fireworks-canvas');
+const ctx = canvas.getContext('2d');
+let fireworksActive = false;
+let particles = [];
+let rockets = [];
 
-  // 显示核心句子：“我们明明只见过一次，却走了这么远。”
-  $("memNote").innerHTML = "我们明明只见过一次，<br>却走了这么远。";
-  $("memNote").classList.add("show");
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
 
-  // 让核心句子停留 4 秒
-  await new Promise(r => setTimeout(r, 4000));
+class Particle {
+  constructor(x, y, color) {
+    this.x = x; this.y = y;
+    this.vx = (Math.random() - 0.5) * 8;
+    this.vy = (Math.random() - 0.5) * 8;
+    this.color = color;
+    this.life = 1.0;
+    this.decay = Math.random() * 0.015 + 0.01;
+    this.gravity = 0.05;
+    this.size = Math.random() * 2 + 1;
+  }
+  update() {
+    this.vx *= 0.98;
+    this.vy *= 0.98;
+    this.vy += this.gravity;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.life -= this.decay;
+  }
+  draw() {
+    ctx.globalAlpha = this.life;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
 
-  // 画面暗下来，黑胶唱片出现
-  show("music");
-  await new Promise(r => setTimeout(r, 2000));
+class Rocket {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = canvas.height;
+    this.vx = (Math.random() - 0.5) * 4;
+    this.vy = Math.random() * -12 - 10;
+    this.targetY = Math.random() * canvas.height * 0.5 + 50;
+    this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.y <= this.targetY) {
+      this.explode();
+      return false;
+    }
+    return true;
+  }
+  explode() {
+    const numParticles = 60 + Math.floor(Math.random() * 40);
+    for (let i = 0; i < numParticles; i++) {
+      particles.push(new Particle(this.x, this.y, this.color));
+    }
+  }
+  draw() {
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
 
-  // 唱针落下（动画持续 1.5 秒）
-  musicScene.classList.add("playing");
-  await new Promise(r => setTimeout(r, 1500));
+function animateFireworks() {
+  if (!fireworksActive) return;
+  requestAnimationFrame(animateFireworks);
+  
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.globalCompositeOperation = 'lighter';
 
-  // “咔哒”一声（视觉上的准备），音乐开始
-  audio.play().catch(()=>{});
+  if (Math.random() < 0.05) {
+    rockets.push(new Rocket());
+  }
 
-  // 音乐结束后，进入最终页面
-  audio.addEventListener("ended", () => {
-    musicScene.classList.remove("playing");
-    show("final");
-    setTimeout(()=>$("f1").classList.add("show"), 500);
-    setTimeout(()=>$("f2").classList.add("show"), 2000);
-    setTimeout(()=>$("f3").classList.add("show"), 3500);
+  rockets = rockets.filter(rocket => {
+    rocket.draw();
+    return rocket.update();
+  });
+
+  particles = particles.filter(p => {
+    p.update();
+    p.draw();
+    return p.life > 0;
   });
 }
 
-// 在用户点击“打开”后，稍等片刻，启动整条故事线
-$("openBtn").addEventListener("click", () => {
-  // 延迟 4 秒启动，让用户先看完第一幕
-  setTimeout(runStory, 4000);
+function startFireworks() {
+  canvas.style.display = 'block';
+  resizeCanvas();
+  fireworksActive = true;
+  animateFireworks();
+  
+  setTimeout(() => {
+    fireworksActive = false;
+    setTimeout(() => { canvas.style.display = 'none'; }, 3000);
+  }, 12000);
+}
+
+/* ==========================================================
+   结局时间线（音乐结束后，也改为 async/await）
+========================================================== */
+audio.addEventListener("ended", async () => {
+  player.classList.remove("playing");
+  show("final");
+  
+  // 1. 依次显示文字
+  await sleep(500);
+  $("f1").classList.add("show");
+  
+  await sleep(1500);
+  $("f2").classList.add("show");
+  
+  await sleep(1500);
+  $("f3").classList.add("show");
+  
+  await sleep(1500);
+  $("f4").classList.add("show"); // 生日快乐
+  
+  await sleep(1500);
+  $("letterHint").classList.add("show-hint"); // 还有一封信
+
+  // 2. 触发烟花 (延迟 7 秒，让文字先站定)
+  await sleep(1000);
+  startFireworks();
+
+  // 3. 生日蛋糕缓缓放大定格
+  await sleep(3000);
+  $("cakeWrapper").classList.add("show");
 });
 
 </script>
