@@ -3,176 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>给你的专属惊喜</title>
+    <title>多远都要在一起</title>
     <style>
-        /* 基础重置 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #ffe6e6 0%, #ffd1ff 100%);
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
             font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
             color: #333;
-            overflow: hidden; /* 防止手机端出现滚动条 */
-            position: relative;
-        }
-
-        /* 背景漂浮的小星星/爱心装饰 */
-        .floating-heart {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 20px;
-            animation: floatUp 10s linear infinite;
-            bottom: -50px;
-            pointer-events: none;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
-        }
-
-        /* 玻璃拟态卡片 */
-        .card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 24px;
-            padding: 30px 20px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: cardIn 1s ease-out;
-        }
-        @keyframes cardIn {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+            padding: 20px;
+            overflow-x: hidden;
         }
 
-        /* 照片画框 */
-        .img-container {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            padding: 5px;
-            background: linear-gradient(45deg, #ff9a9e, #fecfef);
-            margin-bottom: 20px;
-            box-shadow: 0 10px 20px rgba(255, 154, 158, 0.4);
-            animation: pulse 3s infinite alternate;
+        /* ========== 顶部照片墙 ========== */
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            margin-top: 10px;
         }
-        .img-container img {
+        .photo-wrap {
+            background: white;
+            padding: 6px 6px 18px 6px; /* 模拟拍立得底部留白 */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            transition: transform 0.3s ease;
+        }
+        /* 错落有致的倾斜角度 */
+        .photo-wrap:nth-child(1) { transform: rotate(-8deg) translateY(5px); }
+        .photo-wrap:nth-child(2) { transform: rotate(3deg) translateY(-5px); z-index: 2; }
+        .photo-wrap:nth-child(3) { transform: rotate(10deg) translateY(8px); }
+        
+        .photo-wrap img {
+            width: 85px;
+            height: 85px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        /* ========== 中部：唱片机与歌词 ========== */
+        .player-container {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 20px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* 黑胶唱片机 */
+        .record-player {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            flex-shrink: 0;
+        }
+        .vinyl {
             width: 100%;
             height: 100%;
+            background: radial-gradient(circle, #333 30%, #111 70%, #000 100%);
             border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid white;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            animation: spin 4s linear infinite;
+            animation-play-state: paused; /* 默认暂停 */
         }
-        @keyframes pulse {
-            0% { box-shadow: 0 10px 20px rgba(255, 154, 158, 0.4); }
-            100% { box-shadow: 0 15px 30px rgba(255, 154, 158, 0.8); }
+        .vinyl::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.1);
         }
+        /* 黑胶中间的贴纸（也是照片） */
+        .vinyl-label {
+            width: 40%;
+            height: 40%;
+            border-radius: 50%;
+            background-image: url('photo.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 2;
+            border: 2px solid #ff6b81;
+        }
+        /* 唱臂 */
+        .tonearm {
+            position: absolute;
+            top: -5px;
+            right: 0px;
+            width: 40px;
+            height: 5px;
+            background: #aaa;
+            border-radius: 5px;
+            transform-origin: right center;
+            transform: rotate(-30deg); /* 初始状态离开唱片 */
+            transition: transform 0.5s ease;
+            z-index: 3;
+        }
+        .tonearm::after {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: -2px;
+            width: 10px;
+            height: 10px;
+            background: #666;
+            border-radius: 50%;
+        }
+        
+        /* 播放时的状态 */
+        .playing .vinyl { animation-play-state: running; }
+        .playing .tonearm { transform: rotate(10deg); } /* 播放时唱臂搭上 */
 
-        /* 文字 */
-        h1 {
-            font-size: 20px;
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* 歌词区 */
+        .lyrics-container {
+            flex-grow: 1;
+            height: 110px;
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(transparent, black 20%, black 80%, transparent);
+            -webkit-mask-image: linear-gradient(transparent, black 20%, black 80%, transparent);
+        }
+        .lyrics-inner {
+            transition: transform 0.4s ease;
+        }
+        .lyric-line {
+            font-size: 13px;
+            color: #999;
+            padding: 8px 0;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .lyric-line.active {
             color: #ff6b81;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-        }
-        .message {
+            font-weight: bold;
             font-size: 15px;
-            color: #555;
-            line-height: 1.8;
-            margin-bottom: 30px;
-            padding: 0 10px;
+            transform: scale(1.05);
         }
 
-        /* 自定义播放按钮 */
+        /* ========== 底部播放按钮 ========== */
         .play-btn {
+            margin-top: 30px;
             background: linear-gradient(135deg, #ff6b81, #ff9a9e);
             color: white;
             border: none;
             border-radius: 50px;
-            padding: 15px 40px;
+            padding: 15px 50px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 107, 129, 0.5);
+            box-shadow: 0 8px 20px rgba(255, 107, 129, 0.4);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        .play-btn:active {
-            transform: scale(0.95);
-            box-shadow: 0 4px 10px rgba(255, 107, 129, 0.4);
-        }
+        .play-btn:active { transform: scale(0.95); }
         .play-btn.playing {
             background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-            box-shadow: 0 8px 20px rgba(161, 140, 209, 0.5);
         }
 
-        /* 隐藏原始播放器 */
         #bg-music { display: none; }
     </style>
 </head>
 <body>
 
-    <!-- 背景装饰 -->
-    <div class="floating-heart" style="left: 10%; animation-delay: 0s;">✨</div>
-    <div class="floating-heart" style="left: 30%; animation-delay: 2s;">❤️</div>
-    <div class="floating-heart" style="left: 70%; animation-delay: 4s;">✨</div>
-    <div class="floating-heart" style="left: 90%; animation-delay: 6s;">❤️</div>
-    <div class="floating-heart" style="left: 50%; animation-delay: 8s;">✨</div>
-
-    <!-- 主卡片 -->
-    <div class="card">
-        <div class="img-container">
-            <!-- 如果没有照片，这块会自动隐藏 -->
-            <img src="photo.jpg" alt="我们的照片" onerror="this.parentElement.style.display='none'">
-        </div>
-        
-        <h1>碰一碰，听到我</h1>
-        <p class="message">
-            小璎，我给你准备的一首歌。<br>
-            希望这首歌，能陪你度过每一个我不在身边的瞬间。
-        </p>
-
-        <!-- 播放按钮 -->
-        <button id="play-btn" class="play-btn" onclick="togglePlay()">
-            <span id="btn-icon">▶</span> 点击播放
-        </button>
-
-        <!-- 音频文件 -->
-        <audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
+    <!-- 1. 照片墙 (如果名字不对应，请修改这里的 src) -->
+    <div class="gallery">
+        <div class="photo-wrap"><img src="photo.jpg" alt="照片1"></div>
+        <div class="photo-wrap"><img src="photo1.jpg" alt="照片2"></div>
+        <div class="photo-wrap"><img src="photo2.jpg" alt="照片3"></div>
     </div>
+
+    <!-- 2. 唱片机与歌词 -->
+    <div class="player-container" id="player-container">
+        <div class="record-player">
+            <div class="tonearm"></div>
+            <div class="vinyl">
+                <div class="vinyl-label"></div>
+            </div>
+        </div>
+        <div class="lyrics-container" id="lyrics-container">
+            <div class="lyrics-inner" id="lyrics-inner">
+                <!-- 歌词会由JS动态插入 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 播放按钮 -->
+    <button class="play-btn" id="play-btn" onclick="togglePlay()">
+        <span id="btn-icon">▶</span> 点击播放
+    </button>
+
+    <audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
 
     <script>
         var audio = document.getElementById('bg-music');
         var btn = document.getElementById('play-btn');
-        var icon = document.getElementById('btn-icon');
+        var container = document.getElementById('player-container');
+        var lyricsInner = document.getElementById('lyrics-inner');
+        var lyricsContainer = document.getElementById('lyrics-container');
 
+        // ==========================================
+        // ✅ 已经帮你精准转换好的歌词时间轴
+        // ==========================================
+        const lyricsData = [
+            { time: 0, text: "作曲 : G.E.M.邓紫棋" },
+            { time: 1, text: "作词 : G.E.M.邓紫棋" },
+            { time: 14.25, text: "想听你听过的音乐 想看你看过的小说" },
+            { time: 20.16, text: "我想收集每一刻 我想看到你眼里的世界" },
+            { time: 28.44, text: "想到你到过的地方 和你曾度过的时光" },
+            { time: 34.17, text: "不想错过每一刻 多希望我一直在你身旁" },
+            { time: 42.80, text: "未来何从何去 你快乐我也就没关系" },
+            { time: 48.41, text: "对你我最熟悉 你爱自由我却更爱你" },
+            { time: 55.56, text: "我能习惯远距离 爱总是身不由己" },
+            { time: 62.37, text: "宁愿换个方式至少还能遥远爱着你" },
+            { time: 69.50, text: "爱能克服远距离 多远都要在一起" },
+            { time: 76.57, text: "你已经不再存在我世界里 请不要离开我的回忆" },
+            { time: 88.40, text: "想你说爱我的语气 想你望着我的眼睛" },
+            { time: 94.22, text: "不想忘记每一刻 用思念让我们一直前进" },
+            { time: 104.85, text: "想象你失落的唇印 想象你失约的旅行" },
+            { time: 110.70, text: "想象你离开的一刻 如果我有留下你的勇气" },
+            { time: 118.00, text: "我能习惯远距离 爱总是身不由己" },
+            { time: 126.06, text: "宁愿换个方式至少还能遥远爱着你" },
+            { time: 133.36, text: "爱能克服远距离 多远都要在一起" },
+            { time: 140.09, text: "我已经不再存在你的心里 就让我独自守着回忆" },
+            { time: 148.70, text: "如果阳光永远都炽热" },
+            { time: 152.40, text: "如果彩虹不会掉颜色" },
+            { time: 156.00, text: "你能不能不离开呢" },
+            { time: 163.30, text: "我能习惯远距离 爱总是身不由己" },
+            { time: 170.60, text: "宁愿换个方式至少还能遥远爱着你" },
+            { time: 177.80, text: "爱能克服远距离 多远都要在一起" },
+            { time: 184.70, text: "你已经不再存在我世界里 请不要离开我的回忆" },
+            { time: 198.00, text: "请不要离开 我的回忆" }
+        ];
+
+        // 初始化歌词DOM
+        lyricsData.forEach((item, index) => {
+            let div = document.createElement('div');
+            div.className = 'lyric-line';
+            div.id = 'lyric-' + index;
+            div.innerText = item.text;
+            lyricsInner.appendChild(div);
+        });
+
+        let currentLyricIndex = -1;
+
+        // 监听播放进度，同步歌词
+        audio.addEventListener('timeupdate', function() {
+            let currentTime = audio.currentTime;
+            let newIndex = -1;
+            
+            // 找到当前时间对应的歌词索引
+            for (let i = 0; i < lyricsData.length; i++) {
+                if (currentTime >= lyricsData[i].time) {
+                    newIndex = i;
+                } else {
+                    break;
+                }
+            }
+
+            if (newIndex !== -1 && newIndex !== currentLyricIndex) {
+                // 移除上一句的高亮
+                if (currentLyricIndex !== -1) {
+                    let prevLine = document.getElementById('lyric-' + currentLyricIndex);
+                    if(prevLine) prevLine.classList.remove('active');
+                }
+                
+                // 高亮当前句
+                currentLyricIndex = newIndex;
+                let currentLine = document.getElementById('lyric-' + currentLyricIndex);
+                if(currentLine) {
+                    currentLine.classList.add('active');
+                    
+                    // 歌词向上滚动逻辑 (让当前这句保持在正中间)
+                    let offset = currentLyricIndex * currentLine.offsetHeight;
+                    let containerHeight = lyricsContainer.offsetHeight;
+                    let translateY = offset - containerHeight / 2 + currentLine.offsetHeight / 2;
+                    lyricsInner.style.transform = `translateY(-${translateY}px)`;
+                }
+            }
+        });
+
+        // 播放/暂停控制
         function togglePlay() {
             if (audio.paused) {
                 audio.play();
                 btn.classList.add('playing');
-                icon.innerText = '❚❚'; // 暂停图标
+                container.classList.add('playing');
                 btn.innerHTML = '<span id="btn-icon">❚❚</span> 正在播放...';
             } else {
                 audio.pause();
                 btn.classList.remove('playing');
-                btn.innerHTML = '<span id="btn-icon">▶</span> 点击播放';
+                container.classList.remove('playing');
+                btn.innerHTML = '<span id="btn-icon">▶</span> 继续播放';
             }
         }
+
+        // 音乐播放结束重置状态
+        audio.addEventListener('ended', function() {
+            btn.classList.remove('playing');
+            container.classList.remove('playing');
+            btn.innerHTML = '<span id="btn-icon">▶</span> 点击播放';
+            currentLyricIndex = -1;
+            lyricsInner.style.transform = 'translateY(0px)';
+            document.querySelectorAll('.lyric-line').forEach(el => el.classList.remove('active'));
+        });
     </script>
 </body>
 </html>
